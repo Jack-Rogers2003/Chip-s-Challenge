@@ -71,7 +71,15 @@ public class Board {
         }
     }
 
-    public void createActorOrItem(String actorOrItem, Integer[] currentSquarePosition) {
+    /**
+    *Checks if what is on the square is an actor, item, or monster and calls
+    *the respective method. This is seperate from the create createRow method 
+    *for readability
+    * @param actorOrItem String that represents either an actor or Item
+    * @param currentSquarePosition the current position of the square we're checking
+    */
+    public void createActorOrItem(String actorOrItem, 
+                                  Integer[] currentSquarePosition) {
 
     }
 
@@ -101,14 +109,20 @@ public class Board {
 
     }
 
-    private void createItem(String item, Integer[] currentSquarePosition) {
+    /**
+    * Creates an item on the board
+    * @param item The item to be created
+    * @param itemPositon The positon of the item being created on the board
+    */
+    private void createItem(String item, Integer[] itemPositon) {
 
     }
 
     /**
      * Creates a new player for the board
+     * @param currentSquarePosition the positon of the player
      */
-    private void createPlayer(Integer[] currentSquarePosition) {
-        BOARD_POSITIONS.setPlayerPosition(currentSquarePosition);
+    private void createPlayer(Integer[] playerPositon) {
+        BOARD_POSITIONS.setPlayerPosition(playerPositon);
     }
 }
