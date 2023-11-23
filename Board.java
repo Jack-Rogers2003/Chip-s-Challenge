@@ -8,11 +8,11 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Board {
-    private final Integer[] boardSize;
     private static final Actor BOARD_ACTORS = new Actor();
-    private Tile tiles;
     private static final Position BOARD_POSITIONS = new Position();
     private static final Movement BOARD_MOVEMENT = new Movement();
+    private final Integer[] boardSize;
+    private Tile[] tiles;
 
     /**
      * Constructor for the board class
