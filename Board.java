@@ -1,4 +1,3 @@
-import javafx.util.Pair;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -9,11 +8,11 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Board {
-    private Integer[] boardSize;
-    private Actor boardActors;
+    private final Integer[] boardSize;
+    private static final Actor BOARD_ACTORS = new Actor();
     private Tile tiles;
-    private Position boardPositions;
-    private Integer[] currentSquarePosition;
+    private static final Position BOARD_POSITIONS = new Position();
+    private static final Movement BOARD_MOVEMENT = new Movement();
 
     /**
      * Constructor for the board class
@@ -23,6 +22,10 @@ public class Board {
     public Board(String fileName) throws FileNotFoundException {
         File levelFile = new File(fileName);
         Scanner fileReader = new Scanner(levelFile);
+        boardSize = new Integer[]{Integer.parseInt(fileReader.nextLine(),
+                Integer.parseInt(fileReader.nextLine()))};
+        //Two lines above get the first two lines from the file which are
+        //The height and width of the board, and converts them to an Int
         while(fileReader.hasNextLine()) {
             createRow(fileReader.nextLine());
         }
@@ -40,7 +43,7 @@ public class Board {
      * @return returns an Actor
      */
     private Actor getBoardActors(){
-        return boardActors;
+        return BOARD_ACTORS;
     }
 
     /**
@@ -58,45 +61,54 @@ public class Board {
      *                all objects that are on it
      */
     private void createRow(String fileRow) {
+        Integer[] currentSquarePosition = new Integer[]{0,0};
         String[] rowElements = fileRow.split("_");
-        for(int i = 0; i <= rowElements.length; i++) {
-            String[] currentSquare = rowElements[i].split("");
-            createTile(currentSquare[0]);
-
+        for(int i = 0; i <= boardSize[0]; i++) {
+            String[] propertiesOfSquare = rowElements[i].split("");
+            createTile(propertiesOfSquare[0], currentSquarePosition);
+            createActorOrItem(propertiesOfSquare[1], currentSquarePosition);
+            currentSquarePosition[1] = currentSquarePosition[1]++;
         }
     }
 
-    private void createTile(String tile) {
+    public void createActorOrItem(String actorOrItem, Integer[] currentSquarePosition) {
 
+    }
+
+    /**
+     * Creates a new tile for the current square of the board
+     * @param tile tile to be created
+     */
+    private void createTile(String tile, Integer[] currentSquarePosition) {
     }
 
     /**
      * Creates a new monster on the board
      * @param monster The monster to be created
      */
-    private void createMonster(String monster) {
+    private void createMonster(String monster, Integer[] currentSquarePosition) {
         switch (monster){
             case "F":
-                boardPositions.setMonsterPosition(new Frog(),
+                BOARD_POSITIONS.setMonsterPosition(new Frog(),
                         currentSquarePosition);
             case "PB":
-                boardPositions.setMonsterPosition(new PinkBall(),
+                BOARD_POSITIONS.setMonsterPosition(new PinkBall(),
                         currentSquarePosition);
             case "B":
-                boardPositions.setMonsterPosition(new Bug(),
+                BOARD_POSITIONS.setMonsterPosition(new Bug(),
                         currentSquarePosition);
         }
 
     }
 
-    private void createItem(String item) {
+    private void createItem(String item, Integer[] currentSquarePosition) {
 
     }
 
     /**
      * Creates a new player for the board
      */
-    private void createPlayer() {
-        boardPositions.setPlayerPosition(currentSquarePosition);
+    private void createPlayer(Integer[] currentSquarePosition) {
+        BOARD_POSITIONS.setPlayerPosition(currentSquarePosition);
     }
 }

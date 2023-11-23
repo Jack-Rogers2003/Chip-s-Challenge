@@ -1,8 +1,7 @@
-import javafx.util.Pair;
 import java.util.HashMap;
 
 /**
- * Class that is used to track the positons of objects on the board
+ * Class that is used to track the positions of objects on the board
  * @author Jack Rogers
  * @version 1.0
  */
@@ -11,6 +10,7 @@ public class Position {
     private static HashMap<Object, Integer[]> monsterPosition;
     private static HashMap<Item, Integer[]> itemPosition;
     private static Integer[] blockPosition;
+    private static HashMap<Tile, Integer[]> tilePosition;
 
     /**
      * Returns the position of the player on the board
@@ -31,6 +31,16 @@ public class Position {
     }
 
     /**
+     * Returns the position of a monster
+     * @param monster the monster we are looking for the position of
+     * @return The position of a monster as a Pair
+     * of integers of its x and y position
+     */
+    public Integer[] getMonsterPosition(Object monster) {
+        return monsterPosition.get(monster);
+    }
+
+    /**
      * Sets the new position of a monster after a movement
      * @param monster The monster that's position is changing
      * @param newPosition The new position of the monster
@@ -40,12 +50,24 @@ public class Position {
     }
 
     /**
-     * Returns the position of a monster
-     * @param monster the monster we are looking for the position of
-     * @return The position of a monster as a Pair
-     * of integers of its x and y position
+     * Returns the position of an item on the board
+     * @param itemToFind Item we are looking for the position of
+     * @return the position of the item as an array of Integers representing
+     * the x and y coordinates
      */
-    public Integer[] getMonsterPosition(Object monster) {
-        return monsterPosition.get(monster);
+    public Integer[] getItemPosition(Item itemToFind) {
+        return itemPosition.get(itemToFind);
+    }
+
+    /**
+     * This method removes an item from the HashMap of itemPosition
+     * The reason it is removed rather than simply moved is that once an item
+     * is in the player's inventory, it is no longer on the actual board itself
+     * therefore we remove it entirely from here, though the object itself
+     * still exists within the player's inventory
+     * @param itemToRemove The item we are removing from the board
+     */
+    public void removeItem(Item itemToRemove) {
+        itemPosition.remove(itemToRemove);
     }
 }
