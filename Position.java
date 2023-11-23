@@ -5,12 +5,13 @@ import java.util.HashMap;
  * @author Jack Rogers
  * @version 1.0
  */
-public class Position {
+
+public static class Position {
     private static Integer[] playerPosition;
     private static HashMap<Object, Integer[]> monsterPosition;
     private static HashMap<Item, Integer[]> itemPosition;
     private static Integer[] blockPosition;
-    private static HashMap<Tile, Integer[]> tilePosition;
+    private static HashMap<Integer[], Tile> tilePosition;
 
     /**
      * Returns the position of the player on the board
@@ -69,5 +70,23 @@ public class Position {
      */
     public void removeItem(Item itemToRemove) {
         itemPosition.remove(itemToRemove);
+    }
+
+    /**
+    * Returns the current position of the block on the board
+    * @return the positon of block as an Array of Integers containing its
+    * X and Y coordinate
+    */
+    public Integer[] getBlockPosition() {
+        return blockPosition;
+    }
+
+    /**
+    * Sets the new positon of the block after it has been moved
+    * @param newPosition the new positon of the block as an Array of Integers
+    * representing its X and Y coordinate 
+    */
+    public void setBlockPositon(Integer[] newPosition) {
+        blockPosition = newPositon;
     }
 }
