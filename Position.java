@@ -6,7 +6,7 @@ import java.util.HashMap;
  * @version 1.0
  */
 
-public static class Position {
+public class Position {
     private static Integer[] playerPosition;
     private static HashMap<Object, Integer[]> monsterPosition;
     private static HashMap<Item, Integer[]> itemPosition;
@@ -82,11 +82,11 @@ public static class Position {
     }
 
     /**
-    * Sets the new positon of the block after it has been moved
-    * @param newPosition the new positon of the block as an Array of Integers
+    * Sets the new position of the block after it has been moved
+    * @param newPosition the new position of the block as an Array of Integers
     * representing its X and Y coordinate 
     */
-    public void setBlockPositon(Integer[] newPosition) {
-        blockPosition = newPositon;
+    public void setBlockPosition(Integer[] newPosition) {
+        blockPosition = newPosition;
     }
 }

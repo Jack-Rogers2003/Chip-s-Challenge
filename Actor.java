@@ -5,7 +5,7 @@
  * @author Benji Brew
  * @version 1.0
  */
-public abstract class Actor {
+public class Actor {
 
     private Position position;
     private int gameTickMovementInterval;
@@ -45,11 +45,12 @@ public abstract class Actor {
      * @param tileLayer The current state of the tile layer.
      * @param actorLayer The current state of the actor layer.
      */
-    public void moveTo(Position newPosition, Tile[][] tileLayer, Actor[][] actorLayer) {
-        if (canMoveTo(newPosition, tileLayer, actorLayer)) {
-            setPosition(newPosition);
-        }
-    }
+    //public void moveTo(Position newPosition, Tile[][] tileLayer, Actor[][] actorLayer) {
+    //    if (canMoveTo(newPosition, tileLayer, actorLayer)) {
+            //setPosition(newPosition);
+     //   }
+   // }
+    //Commeneted this about for now as canMoveTo has yet to be fully created
 
     /**
      * Performs an action specific to the type of actor.
@@ -57,7 +58,9 @@ public abstract class Actor {
      *
      * @param currentGameTick The current game tick.
      */
-    public abstract void performAction(int currentGameTick);
+    public void performAction(int currentGameTick) {
+
+    }
 
     /**
      * Determines if the actor should move based on the current game tick.

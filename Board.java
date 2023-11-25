@@ -1,3 +1,8 @@
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -8,11 +13,12 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Board {
-    private static final Actor BOARD_ACTORS = new Actor();
     private static final Position BOARD_POSITIONS = new Position();
     private static final Movement BOARD_MOVEMENT = new Movement();
     private final Integer[] boardSize;
     private Tile[] tiles;
+    private Timeline tickTimeline;
+    private Integer currentTick;
 
     /**
      * Constructor for the board class
@@ -32,6 +38,26 @@ public class Board {
     }
 
     /**
+     * This method starts the running of the game, and generates a tick counter
+     */
+    public void startGame() {
+        tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> tick()));
+        tickTimeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+    /**
+     * Adds a tick every half a second
+     */
+    public void tick() {
+        currentTick += 1;
+        System.out.println(currentTick);
+    }
+
+    public String test() {
+        return "You can do stuff after the window is gone";
+    }
+
+    /**
      * Calls for the movement of a player
      */
     private void getPlayerMovement(){
@@ -42,9 +68,9 @@ public class Board {
      * Returns the actor object that contains the actors of the board
      * @return returns an Actor
      */
-    private Actor getBoardActors(){
-        return BOARD_ACTORS;
-    }
+    //private Actor getBoardActors(){
+     //   return BOARD_ACTORS;
+   // }
 
     /**
      * Returns the board size as a Pair of Integers
@@ -73,13 +99,13 @@ public class Board {
 
     /**
     *Checks if what is on the square is an actor, item, or monster and calls
-    *the respective method. This is seperate from the create createRow method 
+    *the respective method. This is separate from the create createRow method
     *for readability
     * @param actorOrItem String that represents either an actor or Item
-    * @param currentSquarePosition the current position of the square we're checking
+    * @param actorOrItemPosition position of the actor or item to be created
     */
-    public void createActorOrItem(String actorOrItem, 
-                                  Integer[] currentSquarePosition) {
+    public void createActorOrItem(String actorOrItem,
+                                  Integer[] actorOrItemPosition) {
 
     }
 
@@ -87,24 +113,24 @@ public class Board {
      * Creates a new tile for the current square of the board
      * @param tile tile to be created
      */
-    private void createTile(String tile, Integer[] currentSquarePosition) {
+    private void createTile(String tile, Integer[] tilePosition) {
     }
 
     /**
      * Creates a new monster on the board
      * @param monster The monster to be created
      */
-    private void createMonster(String monster, Integer[] currentSquarePosition) {
+    private void createMonster(String monster, Integer[] monsterPosition) {
         switch (monster){
             case "F":
                 BOARD_POSITIONS.setMonsterPosition(new Frog(),
-                        currentSquarePosition);
+                        monsterPosition);
             case "PB":
                 BOARD_POSITIONS.setMonsterPosition(new PinkBall(),
-                        currentSquarePosition);
+                        monsterPosition);
             case "B":
                 BOARD_POSITIONS.setMonsterPosition(new Bug(),
-                        currentSquarePosition);
+                        monsterPosition);
         }
 
     }
@@ -112,17 +138,17 @@ public class Board {
     /**
     * Creates an item on the board
     * @param item The item to be created
-    * @param itemPositon The positon of the item being created on the board
+    * @param itemPosition The position of the item being created on the board
     */
-    private void createItem(String item, Integer[] itemPositon) {
+    private void createItem(String item, Integer[] itemPosition) {
 
     }
 
     /**
      * Creates a new player for the board
-     * @param currentSquarePosition the positon of the player
+     * @param playerPosition the position of the player
      */
-    private void createPlayer(Integer[] playerPositon) {
-        BOARD_POSITIONS.setPlayerPosition(playerPositon);
+    private void createPlayer(Integer[] playerPosition) {
+        BOARD_POSITIONS.setPlayerPosition(playerPosition);
     }
 }
