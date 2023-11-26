@@ -12,28 +12,30 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class BoardGUI {
-    private static final int WINDOW_HEIGHT = 600;
+    private static final int WINDOW_HEIGHT = 800;
     private static final int WINDOW_WIDTH = 500;
-    private static final int CANVAS_WIDTH = 500;
+    private static final int CANVAS_WIDTH = 600;
     private static final int CANVAS_HEIGHT = 400;
     private static final int GRID_CELL_WIDTH = 50;
     private static final int GRID_CELL_HEIGHT = 50;
 
     private static final int GRID_WIDTH = 12;
     private Canvas canvas;
-    private static final Image DIRT_IMAGE = new Image("file:dirt.png");
+    private Image dirtImage;
     private Integer tickCount = 0;
     Text textText = new Text();
 
 
     public Scene generateBoard() {
         Pane root = buildGUI();
+        dirtImage = new Image("file:dirt.png");
         textText = new Text("Current Time: " + tickCount);
         textText.setStyle("-fx-font: 24 arial;");
         textText.setTranslateY(50);
         textText.setTranslateX(300);
         root.getChildren().add(textText);
-        Timeline tickTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> tick()));
+        Timeline tickTimeline =
+                new Timeline(new KeyFrame(Duration.seconds(1), event -> tick()));
         tickTimeline.setCycleCount(Animation.INDEFINITE);
         tickTimeline.play();
         drawGame();
@@ -49,15 +51,10 @@ public class BoardGUI {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        // Set the background to gray.
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        // Draw row of dirt images
-        // We multiply by the cell width and height to turn a coordinate in our grid into a pixel coordinate.
-        // We draw the row at y value 2.
         for (int x = 0; x < GRID_WIDTH; x++) {
-            gc.drawImage(DIRT_IMAGE, x * GRID_CELL_WIDTH, 2 * GRID_CELL_HEIGHT);
+            gc.drawImage(dirtImage, x * GRID_CELL_WIDTH, 2 * GRID_CELL_HEIGHT);
         }
     }
 
