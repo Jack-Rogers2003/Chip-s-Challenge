@@ -1,8 +1,9 @@
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -12,9 +13,10 @@ import java.util.Scanner;
  * @author Jack Rogers
  * @version 1.0
  */
-public class Board {
+public class Board extends BoardGUI {
     private static final Position BOARD_POSITIONS = new Position();
     private static final Movement BOARD_MOVEMENT = new Movement();
+    private static final BoardGUI BOARD_GUI = new BoardGUI();
     private final Integer[] boardSize;
     private Tile[] tiles;
     private Timeline tickTimeline;
@@ -37,20 +39,12 @@ public class Board {
         }
     }
 
-    /**
-     * This method starts the running of the game, and generates a tick counter
-     */
-    public void startGame() {
-        tickTimeline = new Timeline(new KeyFrame(Duration.millis(500), event -> tick()));
-        tickTimeline.setCycleCount(Animation.INDEFINITE);
-    }
 
     /**
      * Adds a tick every half a second
      */
     public void tick() {
         currentTick += 1;
-        System.out.println(currentTick);
     }
 
     public String test() {
@@ -114,6 +108,7 @@ public class Board {
      * @param tile tile to be created
      */
     private void createTile(String tile, Integer[] tilePosition) {
+
     }
 
     /**
@@ -151,4 +146,5 @@ public class Board {
     private void createPlayer(Integer[] playerPosition) {
         BOARD_POSITIONS.setPlayerPosition(playerPosition);
     }
+
 }

@@ -74,7 +74,7 @@ public class Position {
 
     /**
     * Returns the current position of the block on the board
-    * @return the positon of block as an Array of Integers containing its
+    * @return the position of block as an Array of Integers containing its
     * X and Y coordinate
     */
     public Integer[] getBlockPosition() {
