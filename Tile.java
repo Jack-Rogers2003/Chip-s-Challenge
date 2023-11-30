@@ -8,7 +8,7 @@
 public abstract class Tile {
 
     private abstract Boolean moveability;
-
+    private abstract String imageFile;
 
     public abstract Boolean getMoveability();
     public abstract String getFilePath();    
