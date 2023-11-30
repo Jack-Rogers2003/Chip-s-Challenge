@@ -7,7 +7,7 @@
 
 public abstract class Tile {
 
-    private Boolean moveability;
+    private abstract Boolean moveability;
 
     /**
      * Constructor for the Tile class
@@ -20,8 +20,8 @@ public abstract class Tile {
     }
 
 
-    public Boolean getMoveability() {
-        return this.moveability;
+    public abstract Boolean getMoveability() {
+        return moveability;
     }
 }
 
