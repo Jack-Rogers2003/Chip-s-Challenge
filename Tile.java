@@ -9,19 +9,9 @@ public abstract class Tile {
 
     private abstract Boolean moveability;
 
-    /**
-     * Constructor for the Tile class
-     *
-     * @param moveability Boolean input that dictates whether
-     *                    an actor can move on the tile or not
-     */
-    Tile(Boolean moveability) {
-        this.moveability = moveability;
-    }
 
+    public abstract Boolean getMoveability();
+    public abstract String getFilePath();    
 
-    public abstract Boolean getMoveability() {
-        return moveability;
-    }
 }
 
