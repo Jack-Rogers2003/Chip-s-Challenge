@@ -1,68 +1,89 @@
 import java.io.File;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Random;
+import java.io.FileWriter;
 /**
  * Class that handles getting the string of a file
- * @author
+ * @author Annabel Ryan
  * @version 1.0
  */
 
 
 public class Game {
+        private static final File LEVELS_FILE_PATH
+                = new File("C:\\Users\\JayRo\\Documents\\University\\" +
+                "230\\A2_Code\\src\\main\\java\\Levels\\");
+        private static final File PLAYER_PROFILES_FILE_PATH
+                = new File("C:\\Users\\JayRo\\Documents\\University\\" +
+                "230\\A2_Code\\src\\main\\java\\PlayerProfiles\\");
+        private static final File LEADERBOARDS_FILE_PATH
+                = new File("C:\\Users\\JayRo\\Documents\\University\\230\\" +
+                "A2_Code\\src\\main\\java\\Leaderboards\\");
 
-    /**
-     * Method that creates a board object
-     * @param nextLevel String input that is the name of the file
-     */
-    public static void getNextLevel(String nextLevel) {
-
-        String levelPath = "C:\\Users\\annab\\OneDrive\\Documents\\Code\\CS-230-A2-GUI-Branch\\levels"
-                + nextLevel; //sorry ik the directory is wrong pls fix it
-
-        try {
-            File level = new File(levelPath);
-            String lvlName = level.getName();
-            System.out.println("File Name: " + lvlName);
-
-            new Board(lvlName);
-
-        } catch (Exception e) {
-            System.out.println("Error"); //prints error after but idk why?
-        }
-    }
-
-    /**
-     * Method that reads all the files in a folder
-     */
-    public static void listFiles() {
-        try {
-            File directory = new File("C:\\Users\\annab\\OneDrive\\Documents\\Code\\CS-230-A2-GUI-Branch\\" +
-                    "levels");
-            for (File file : directory.listFiles()) {
-                if (file.isFile()) {
-                    System.out.println(file.getName());
-                }
+        public Game() {
+            if(!LEVELS_FILE_PATH.exists()) {
+                LEVELS_FILE_PATH.mkdir();
             }
-        } catch (Exception e) {
-            System.out.println("Error");
+            if(!PLAYER_PROFILES_FILE_PATH.exists()) {
+                PLAYER_PROFILES_FILE_PATH.mkdir();
+            }
+            if (!LEADERBOARDS_FILE_PATH.exists()) {
+                LEADERBOARDS_FILE_PATH.mkdir();
+            }
         }
-    }
 
-    /**
-     * Method that splits the string of a file, where it will get level
-     * number and turn it into and int
-     * @param level String input that is the name of the file
-     */
-    public static void splitString(String level) {
-        String[] parts = level.split("[_.]");
-        String levelString = parts[1];
-        int levelNumber = Integer.parseInt(levelString);
-        System.out.println(levelNumber);
-    }
+        public String createNewPlayerProfile(String userName) throws IOException {
+            Random random = new Random();
+            String id = String.format("%04d", random.nextInt(10000));
+            File newPlayerProfile = new File(PLAYER_PROFILES_FILE_PATH,
+                    userName + "#" + id + ".txt");
+            newPlayerProfile.createNewFile();
+            FileWriter myWriter = new FileWriter(newPlayerProfile);
+            myWriter.write("1");
+            myWriter.close();
+            return userName + "#" + id;
+        }
 
-    public static void main(String[] args) {
-        getNextLevel("level_1.txt");
-        listFiles();
-        splitString("level_1.txt");
-        //just testing if things work
-    }
+        public ArrayList<String> getLeaderboard(String level) throws FileNotFoundException {
+            File leaderboardFile = new File (LEADERBOARDS_FILE_PATH + level + ".txt");
+            Scanner fileReader = new Scanner(leaderboardFile);
+            ArrayList<String> leaderBoard = new ArrayList<>();
+            while (fileReader.hasNextLine()) {
+                leaderBoard.add(fileReader.nextLine());
+            }
+            return leaderBoard;
+        }
+
+        public File getLevel(String level) {
+            return new File(LEVELS_FILE_PATH + "\\" + level + ".txt");
+        }
+
+        public File getLevelLeaderboard(String level) {
+            return new File(LEADERBOARDS_FILE_PATH + "\\" + level + ".txt");
+        }
+
+        public File getNextLevel(String level) {
+            int currentLevelNumber = level.charAt(6) - '0';
+            String nextLevel = "Level" + (currentLevelNumber + 1) + ".txt";
+            return getLevel(nextLevel);
+        }
+
+        public ArrayList<String> getAllPlayerNames() {
+            ArrayList<String> userNames = new ArrayList<>();
+            File[] files = new File(String.valueOf(PLAYER_PROFILES_FILE_PATH)).listFiles();
+            assert files != null;
+            for (File fileName : files) {
+                String currentName = fileName.getName();
+                userNames.add(currentName.substring(0, currentName.length()-4));
+            }
+            return userNames;
+        }
+
+        public static void deleteProfile(String userName) {
+            File toDelete = new File(PLAYER_PROFILES_FILE_PATH + "\\" + userName + ".txt");
+            toDelete.delete();
+        }
 }

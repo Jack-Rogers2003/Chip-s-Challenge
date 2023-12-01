@@ -1,7 +1,12 @@
-public class Wall extendes Tile {
-  private boolean moveability = False;
+public class Wall extends Tile {
+  private static final boolean CAN_MOVE_ON = false;
+  private static final String IMAGE_FILE = "Wall.png";
 
-  public boolean getMoveability() {
-    return moveability;
+  public boolean getCanMoveOn() {
+    return CAN_MOVE_ON;
+  }
+
+  public String getImageFile() {
+    return IMAGE_FILE;
   }
 }

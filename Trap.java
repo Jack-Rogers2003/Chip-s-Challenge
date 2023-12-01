@@ -1,37 +1,47 @@
 public class Trap extends Tile {
-  private boolean isConnected = False;
-  private boolean moveability = True;
-  private boolean isReleased = False;
-  private Button connectedButton = new Button;
+  private boolean isConnected = false;
+  private static final boolean CAN_MOVE_ON = true;
+  private boolean isReleased = false;
+  private Button connectedButton = new Button();
+  private static final String IMAGE_FILE = "Trap.png";
 
 
   //The purpose of having two constructors is in case a trap is created but the button for it
-  //Hasn't yet, this lets the trap stil be created without crashing the program
+  //Hasn't yet, this lets the trap still be created without crashing the program
   public Trap(Button newButton) {
-    connctedButton = newButton;
-    isConncted = True;
+    connectedButton = newButton;
+    isConnected = true;
   }
 
   public Trap() {
   }
 
   public void releaseTrap() {
-    isReleased = True;
+    isReleased = true;
   }
 
   public boolean getIsReleased() {
     return isReleased;
   }
 
-  public void setConnectedButton(Button newButton) {
-    connectedButton = newButton;
+  public boolean getIsConnected() {
+    return isConnected;
   }
 
-  public Button getConnctedButton() {
+  public void setConnectedButton(Button newButton) {
+    connectedButton = newButton;
+    isConnected = true;
+  }
+
+  public Button getConnectedButton() {
     return connectedButton;
   }
 
-  public boolean getMoveability() {
-    return moveability;
+  public boolean getCanMoveOn() {
+    return CAN_MOVE_ON;
+  }
+
+  public String getImageFile() {
+    return IMAGE_FILE;
   }
 }

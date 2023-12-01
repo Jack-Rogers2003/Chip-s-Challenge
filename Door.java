@@ -1,33 +1,28 @@
 public class Door extends Tile {
-
-  private String colour;
-  private boolean moveability = False;
+  private static final boolean CAN_MOVE_ON = false;
+  private final String colour;
   private String imageFile;
   
 
-  public Tile(String newColour) {
+  public Door(String newColour) {
     colour = newColour;
     switch (colour) {
-      case "R":
-        imageFile = "file:redDoor.png";
-        break;
-      case "Y":
-        imageFile = "file:yellowDoor.png";
-        break;
-      case "G":
-        imageFile = "file:greenDoor.png";
-        break;
-      case "B":
-        imageFile = "file:blueDoor.png";
-        break;
+      case "R" -> imageFile = "RedDoor.png";
+      case "Y" -> imageFile = "YellowDoor.png";
+      case "G" -> imageFile = "GreenDoor.png";
+      case "B" -> imageFile = "BlueDoor.png";
     }
   }
 
-  public String getFilePath() {
+  public String getImageFile() {
     return imageFile;
   }
 
-  public boolean getMoveability() {
-    return moveability;
+  public boolean getCanMoveOn() {
+    return CAN_MOVE_ON;
+  }
+
+  public String getColour() {
+    return colour;
   }
 }

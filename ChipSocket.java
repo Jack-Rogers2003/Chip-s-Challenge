@@ -1,20 +1,14 @@
 public class ChipSocket extends Tile {
-  private boolean moveability = False;
-  private int numberOfChips;
+  private static final boolean CAN_MOVE_ON = false;
+  private final int numberOfChips;
   private String imageFile;
 
   public ChipSocket(int newNumberOfChips) {
-    numberofChips = newNumberOfChips;
-    switch(numberOfChips) {
-      case 1:
-        imageFile = "file:chipSocket1.png";
-        break;
-      case 2:
-        imageFile = "file:chipSocket2.png";
-        break;
-      case 3:
-        imageFile = "file:chipSocket3.png";
-        break;
+    numberOfChips = newNumberOfChips;
+    switch (numberOfChips) {
+      case 1 -> imageFile = "ChipSocket1.png";
+      case 2 -> imageFile = "ChipSocket2.png";
+      case 3 -> imageFile = "ChipSocket3.png";
     }
   }
 
@@ -22,11 +16,11 @@ public class ChipSocket extends Tile {
     return numberOfChips;
   }
 
-  public boolean getMoveability() {
-    return moveability;
+  public boolean getCanMoveOn() {
+    return CAN_MOVE_ON;
   }
 
-  public String getFilePath() {
+  public String getImageFile() {
     return imageFile;
   }
 }

@@ -24,11 +24,10 @@ public class Board extends BoardGUI {
 
     /**
      * Constructor for the board class
-     * @param fileName String input that is the name of the file that contains
+     * @param levelFile String input that is the name of the file that contains
      *                 the details of the current level
      */
-    public Board(String fileName) throws FileNotFoundException {
-        File levelFile = new File(fileName);
+    public Board(File levelFile) throws FileNotFoundException {
         Scanner fileReader = new Scanner(levelFile);
         boardSize = new Integer[]{Integer.parseInt(fileReader.nextLine(),
                 Integer.parseInt(fileReader.nextLine()))};

@@ -1,16 +1,21 @@
 public class Button extends Tile {
-  private boolean moveability = True;
-  private boolean isPressed = False;
+  private static final boolean CAN_MOVE_ON = true;
+  private boolean isPressed = false;
+  private static final String IMAGE_FILE = "Button.png";
 
   public boolean getIsPressed() {
     return isPressed;
   }
 
   public void setIsPressed() {
-    isPressed = True;
+    isPressed = true;
   }
 
-  public boolean getMoveability() {
-    return moveability;
+  public boolean getCanMoveOn() {
+    return CAN_MOVE_ON;
+  }
+
+  public String getImageFile() {
+    return IMAGE_FILE;
   }
 }
