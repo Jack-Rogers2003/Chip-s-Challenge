@@ -18,10 +18,20 @@ public class Ice extends Tile {
     return corner;
   }
 
+      /**
+     * Gets the boolean value of whether or not the ice can be moved on.
+     *
+     * @return The boolean value of whether or not the ice can be moved on.
+     */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
+    /**
+    * Gets the image file of the ice.
+    *
+    * @return The String of the image file of the ice.
+    */
   public String getImageFile() {
     return imageFile;
   }
