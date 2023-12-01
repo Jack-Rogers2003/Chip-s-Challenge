@@ -1,14 +1,16 @@
 /**
  * Class representing the player in the game.
  * The player has specific behaviors like moving based on keyboard input and interacting with game elements.
- * @author Benji Brew
- * @version 1.0
+ * @author Benji Brew, Uzair
+ * @version 1.1
+ * Added methods to show items held by player and ways to add and remove them as well 
  */
 public class Player extends Actor {
 
     private String playerName;
     private int highestLevelUnlocked;
     private boolean onIce;
+    private List<Item> items;
 
     /**
      * Constructor for creating a new Player.
@@ -21,8 +23,36 @@ public class Player extends Actor {
         this.playerName = playerName;
         this.highestLevelUnlocked = 1; // Default starting level
         this.onIce = false;
+        this.items = new ArrayList<>();
     }
 
+   /**
+    * Gets the player's items.
+    *
+    * @return The list of items the player has.
+    */
+    public List<Item> getItems() {
+        return items;
+    }
+    
+    /**
+     * Adds an item to the player's inventory.
+     *
+     * @param item The item to be added.
+     */
+    public void addItem(Item item) {
+        items.add(item);
+    }
+    
+    /**
+     * Removes an item from the player's inventory.
+     *
+     * @param item The item to be removed.
+     */
+    public void removeItem(Item item) {
+        items.remove(item);
+    }
+    
     /**
      * Gets the player's name.
      *
