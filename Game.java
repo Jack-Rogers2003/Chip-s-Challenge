@@ -86,4 +86,14 @@ public class Game {
             File toDelete = new File(PLAYER_PROFILES_FILE_PATH + "\\" + userName + ".txt");
             toDelete.delete();
         }
+
+        public static int getCompletedLevels(String userName) {
+            try {
+                File toGetLevelsFrom = new File(PLAYER_PROFILES_FILE_PATH + "\\" + userName + ".txt");
+                Scanner fileReader = new Scanner(toGetLevelsFrom);
+                return Integer.parseInt(fileReader.nextLine());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 }

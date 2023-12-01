@@ -9,7 +9,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 
-import java.util.Optional;
+import java.io.FileNotFoundException;
+
 
 /**
  * Class for the Level selector and anything relating to its window
@@ -56,6 +57,7 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         LEVEL_4.setTranslateY(30);
         LEVEL_5.setTranslateY(70);
         StackPane layout = new StackPane();
+        buttonEnableOrDisable();
         layout.getChildren().add(WINDOW_HEADER);
         layout.getChildren().add(BACK_BUTTON);
         layout.getChildren().add(DELETE_PROFILE);
@@ -88,11 +90,28 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         }
     }
 
+    public void buttonEnableOrDisable() {
+        int levelsCompleted = Game.getCompletedLevels(GameGUIManager.
+                getCurrentProfile());
+        if(levelsCompleted < 2) {
+            LEVEL_2.setDisable(true);
+        }
+        if (levelsCompleted < 3) {
+            LEVEL_3.setDisable(true);
+        }
+        if (levelsCompleted < 4) {
+            LEVEL_4.setDisable(true);
+        }
+        if (levelsCompleted < 5) {
+            LEVEL_5.setDisable(true);
+        }
+    }
+
     public ButtonType checkDelete() {
         Alert alertBox = new Alert(Alert.AlertType.CONFIRMATION);
         alertBox.setTitle("Profile Deletion Confirm");
         alertBox.setHeaderText("Are you sure you want to delete this profile?" +
-                "You will not be able to recover it");
+                " You will not be able to recover it");
         alertBox.showAndWait();
         return alertBox.getResult();
     }

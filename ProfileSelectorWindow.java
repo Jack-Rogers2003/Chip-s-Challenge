@@ -25,7 +25,7 @@ public class ProfileSelectorWindow extends Application implements EventHandler<A
     private static final Text WINDOW_HEADER = new Text("Choose an option");
     private static final Game GAME = new Game();
     private static final int WINDOW_HEIGHT = 250;
-    private static final int WINDOW_WIDTH = 500;
+    private static final int WINDOW_WIDTH = 250;
 
     /**
      *
@@ -78,7 +78,9 @@ public class ProfileSelectorWindow extends Application implements EventHandler<A
         } else if (event.getSource() == NEW_PROFILE_BUTTON) {
             String userName = nameEntryPopUp();
             try {
-                confirmationBox(GAME.createNewPlayerProfile(userName));
+                if(userName.length() > 0) {
+                    confirmationBox(GAME.createNewPlayerProfile(userName));
+                    }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
