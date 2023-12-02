@@ -1,8 +1,15 @@
+/**
+ * This class creates the Ice tile
+ */
+
 public class Ice extends Tile {
   private static final boolean CAN_MOVE_ON = true;
   private final String imageFile;
   private final String corner;
 
+  /**
+  * Constructor for the Ice tile
+  */
   public Ice(String newCorner) {
     corner = newCorner;
     switch (corner) {
