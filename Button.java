@@ -3,10 +3,20 @@ public class Button extends Tile {
   private boolean isPressed = false;
   private static final String IMAGE_FILE = "Button.png";
 
+        /**
+     * Gets the boolean value of whether or not the button is pressed.
+     *
+     * @return The boolean value of whether or not the button is pressed.
+     */
   public boolean getIsPressed() {
     return isPressed;
   }
 
+
+        /**
+     * Sets the boolean value of whether or not the button is pressed.
+     * 
+     */
   public void setIsPressed() {
     isPressed = true;
   }
