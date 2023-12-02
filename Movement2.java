@@ -36,7 +36,7 @@ public class Movement {
  * @param board Board value of current board being played on
  */
     public void moveActor(Integer[] newPos, Actor actor, Board board) {
-        if (isOutOfBounds(board.getBoardSize(), newPos, board)) {
+        if (isOutOfBounds(board.getBoardSize(), board)) {
         } else {
             Position newPosCLass = null;
             newPosCLass.setPlayerPosition(newPos);  //No getActorPos Integer[] so using Player Integer[] rn
