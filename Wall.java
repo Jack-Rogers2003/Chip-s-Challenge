@@ -1,3 +1,7 @@
+/**
+ * This class creates the Wall tile
+ */
+
 public class Wall extends Tile {
   private static final boolean CAN_MOVE_ON = false;
   private static final String IMAGE_FILE = "Wall.png";
