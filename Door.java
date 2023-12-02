@@ -14,14 +14,29 @@ public class Door extends Tile {
     }
   }
 
+      /**
+    * Gets the image file of the door.
+    *
+    * @return The String of the image file of the door.
+    */
   public String getImageFile() {
     return imageFile;
   }
 
+        /**
+     * Gets the boolean value of whether or not the door can be moved on.
+     *
+     * @return The boolean value of whether or not the door can be moved on.
+     */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
+      /**
+    * Gets the colour of the door.
+    *
+    * @return The String of the colour of the door.
+    */
   public String getColour() {
     return colour;
   }
