@@ -12,10 +12,8 @@ public class Button extends Tile {
     return isPressed;
   }
 
-
-        /**
+      /**
      * Sets the boolean value of whether or not the button is pressed.
-     * 
      */
   public void setIsPressed() {
     isPressed = true;
