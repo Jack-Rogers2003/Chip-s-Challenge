@@ -1,3 +1,7 @@
+/**
+ * This class creates the Button tile
+ */
+
 public class Button extends Tile {
   private static final boolean CAN_MOVE_ON = true;
   private boolean isPressed = false;
