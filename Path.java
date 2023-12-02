@@ -1,3 +1,7 @@
+/**
+ * This class creates the Path tile
+ */
+
 public class Path extends Tile {
 
   private static final boolean CAN_MOVE_ON = true;
