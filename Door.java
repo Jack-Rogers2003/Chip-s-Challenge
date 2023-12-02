@@ -1,9 +1,15 @@
+/**
+ * This class creates the Door tile
+ */
+
 public class Door extends Tile {
   private static final boolean CAN_MOVE_ON = false;
   private final String colour;
   private String imageFile;
   
-
+/**
+* Constructor for the Door tile
+*/
   public Door(String newColour) {
     colour = newColour;
     switch (colour) {
