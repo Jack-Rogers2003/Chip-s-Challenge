@@ -1,3 +1,7 @@
+/**
+ * This class creates the Exit tile
+ */
+
 public class Exit extends Tile {
   private static final boolean CAN_MOVE_ON = true;
   private static final String IMAGE_FILE = "Exit.png";
