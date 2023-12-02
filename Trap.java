@@ -1,3 +1,7 @@
+/**
+ * This class creates the Trap tile
+ */
+
 public class Trap extends Tile {
   private boolean isConnected = false;
   private static final boolean CAN_MOVE_ON = true;
