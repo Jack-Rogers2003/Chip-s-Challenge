@@ -1,8 +1,15 @@
+/**
+ * This class creates the ChipSocket tile
+ */
+
 public class ChipSocket extends Tile {
   private static final boolean CAN_MOVE_ON = false;
   private final int numberOfChips;
   private String imageFile;
 
+  /**
+  * Constructor for ChipSocket tile
+  */
   public ChipSocket(int newNumberOfChips) {
     numberOfChips = newNumberOfChips;
     switch (numberOfChips) {
