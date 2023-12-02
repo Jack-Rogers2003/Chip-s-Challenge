@@ -14,6 +14,11 @@ public class Ice extends Tile {
     }
   }
 
+      /**
+    * Gets the corner of the ice.
+    *
+    * @return The String of the corner of the ice.
+    */
   public String getCorner() {
     return corner;
   }
