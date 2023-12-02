@@ -2,13 +2,17 @@
  * Class representing actors in the game, such as players, monsters (pink balls, bugs, frogs), and blocks.
  * Actors have various behaviors and interactions in the game world.
  *
- * @author Benji Brew, Uzair
- * @version 1.1 
  * Changed the class from abstract to concrete. Added new method addMoveableObeject which is supposed to help with tracking the moveable objects 
  *(I'm not sure whether it will work like I intended so if anyone knows how to better implement a method for such behaiviour would be appreciated)
+ *
+ * @author Dan Cross, Benji Brew, Uzair
+ * @version 1.2 
+ * 
+ * Added 
  */
 public class Actor {
 
+    private Movement actorMovement;
     private Position position;
     private int gameTickMovementInterval;
     private List<Actor> moveableObjects; 
@@ -20,9 +24,30 @@ public class Actor {
      * @param gameTickMovementInterval Interval at which the actor moves in terms of game ticks.
      */
     public Actor(Position position, int gameTickMovementInterval) {
+        this.actorMovement = new Movement(this);
         this.position = position;
         this.gameTickMovementInterval = gameTickMovementInterval;
         this.moveableObjects = new ArrayList<>();
+    }
+    /**
+     * Method moves actor in a direction with given user input
+     * Intricacies of the momement in the Movement class, so when calling on an actor in Main this should be the only method needed.
+     * Doesnt quite work yet, I'm not too familiar with how you opperate on objects of type Integer
+    **/
+    public void moveInDirection(String direction) {
+        Integer[] desiredPosition;
+
+        if (direction == "Up") {
+            desiredPosition = [getPosition()[0] + 1, getPosition()[1]];
+        } else if (direction == "Down") {
+            desiredPosition = [getPosition()[0] - 1, getPosition()[1]];
+        } else if (direction == "Right") {
+            desiredPosition = [getPosition()[0], getPosition()[1] + 1];
+        } else if (direction == "Left") {
+            desiredPosition = [getPosition()[0], getPosition()[1] - 1];
+        }
+
+        actorMovement.moveToPosition(desiredPosition);
     }
 
     /**
@@ -30,8 +55,10 @@ public class Actor {
      *
      * @return The current position of the actor.
      */
-    public Position getPosition() {
+    public Integer[] getPosition() {
         return position;
+        // Dan Cross edit: changed the return type to Integer[] as Position is static
+        // and is infact not a position but a collection of all positions.
     }
 
     /**
