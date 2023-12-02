@@ -12,6 +12,12 @@ public class ChipSocket extends Tile {
     }
   }
 
+
+          /**
+     * Gets the int value of the number of chips.
+     *
+     * @return The int value of the number of chips.
+     */
   public int getNumberOfChips() {
     return numberOfChips;
   }
