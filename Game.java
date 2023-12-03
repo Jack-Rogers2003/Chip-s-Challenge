@@ -91,7 +91,9 @@ public class Game {
             try {
                 File toGetLevelsFrom = new File(PLAYER_PROFILES_FILE_PATH + "\\" + userName + ".txt");
                 Scanner fileReader = new Scanner(toGetLevelsFrom);
-                return Integer.parseInt(fileReader.nextLine());
+                String levelsCompleted = fileReader.nextLine();
+                fileReader.close();
+                return Integer.parseInt(levelsCompleted);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

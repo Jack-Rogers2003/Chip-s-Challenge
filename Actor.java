@@ -7,17 +7,17 @@
  */
 public class Actor {
 
-    private Position position;
+    private PositionManager positionManager;
     private int gameTickMovementInterval;
 
     /**
      * Constructor for creating a new Actor.
      *
-     * @param position The starting position of the actor on the board.
+     * @param positionManager The starting position of the actor on the board.
      * @param gameTickMovementInterval Interval at which the actor moves in terms of game ticks.
      */
-    public Actor(Position position, int gameTickMovementInterval) {
-        this.position = position;
+    public Actor(PositionManager positionManager, int gameTickMovementInterval) {
+        this.positionManager = positionManager;
         this.gameTickMovementInterval = gameTickMovementInterval;
     }
 
@@ -26,17 +26,17 @@ public class Actor {
      *
      * @return The current position of the actor.
      */
-    public Position getPosition() {
-        return position;
+    public PositionManager getPosition() {
+        return positionManager;
     }
 
     /**
      * Sets the position of the actor.
      *
-     * @param position The new position of the actor.
+     * @param positionManager The new position of the actor.
      */
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPosition(PositionManager positionManager) {
+        this.positionManager = positionManager;
     }
 
     /**

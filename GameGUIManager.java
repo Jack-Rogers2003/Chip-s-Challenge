@@ -10,10 +10,10 @@ public class GameGUIManager extends Application {
     public static boolean isLevelSelectorWindowNext = false;
     public static boolean isBoardWindowNext = false;
     private static final ProfileSelectorWindow PROFILE_SELECTOR_WINDOW = new ProfileSelectorWindow();
-    private static final BoardGUI BOARD_GUI = new BoardGUI();
     private static final Stage WINDOW = new Stage();
     private static final LevelSelector LEVEL_SELECTOR_WINDOW = new LevelSelector();
     private static String currentProfile = "";
+    private static String currentLevel = "";
 
     /**
      * @param primaryStage the primary stage for this application, onto which
@@ -43,6 +43,14 @@ public class GameGUIManager extends Application {
         return currentProfile;
     }
 
+    public static String getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public static void setCurrentLevel(String newLevel) {
+        currentLevel = newLevel;
+    }
+
     /**
      * Handles opening of the profile selector window
      */
@@ -58,7 +66,7 @@ public class GameGUIManager extends Application {
      */
     private static void openLevelSelectorWindow() {
         Scene levelSelectWindow = LEVEL_SELECTOR_WINDOW.generateMenu();
-        WINDOW.setTitle("Select a Level");
+        WINDOW.setTitle("Welcome " + getCurrentProfile());
         WINDOW.setScene(levelSelectWindow);
         WINDOW.show();
     }
@@ -67,7 +75,11 @@ public class GameGUIManager extends Application {
      * Handles opening of the board window
      */
     private static void openBoardWindow() {
-
+        BoardGUI newBoard = new BoardGUI();
+        Scene boardWindow = newBoard.generateBoard();
+        WINDOW.setTitle(getCurrentLevel());
+        WINDOW.setScene(boardWindow);
+        WINDOW.show();
     }
 
     /**
