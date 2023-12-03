@@ -3,7 +3,7 @@ public class Trap extends Tile {
   private static final boolean CAN_MOVE_ON = true;
   private boolean isReleased = false;
   private Button connectedButton = new Button();
-  private static final String IMAGE_FILE = "Trap.png";
+  private static String imageFile = "trap.png";
 
 
   //The purpose of having two constructors is in case a trap is created but the button for it
@@ -18,6 +18,7 @@ public class Trap extends Tile {
 
   public void releaseTrap() {
     isReleased = true;
+    imageFile = "trap_released.png"
   }
 
   public boolean getIsReleased() {
@@ -42,6 +43,6 @@ public class Trap extends Tile {
   }
 
   public String getImageFile() {
-    return IMAGE_FILE;
+    return imageFile;
   }
 }
