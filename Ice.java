@@ -1,16 +1,16 @@
 public class Ice extends Tile {
   private static final boolean CAN_MOVE_ON = true;
-  private final String imageFile;
+  private String imageFile = "";
   private final String corner;
 
   public Ice(String newCorner) {
     corner = newCorner;
     switch (corner) {
-      case "BR" -> imageFile = "BottomRightIce";
-      case "BL" -> imageFile = "BottomLeftIce";
-      case "TR" -> imageFile = "TopRightIce";
-      case "TL" -> imageFile = "TopLeftIce";
-      default -> imageFile = "Ice";
+      case "B" -> imageFile = "BottomRightIce.png";
+      case "L" -> imageFile = "BottomLeftIce.png";
+      case "T" -> imageFile = "TopRightIce.png";
+      case "R" -> imageFile = "TopLeftIce.png";
+      case "N" -> imageFile = "Ice.png";
     }
   }
 

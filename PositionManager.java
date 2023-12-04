@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class PositionManager {
     private static int[] playerPosition;
     private static HashMap <Object, int[]> monsterPosition = new HashMap<>();
-    private static HashMap <Item, int[]> itemPosition;
+    public static HashMap <Item, int[]> itemPosition = new HashMap<>();
     private static int[] blockPosition;
     public static ArrayList<ArrayList<Tile>> tilePosition = new ArrayList<>();
     private static ArrayList<ArrayList<Object[]>> squareProperties =
@@ -64,11 +64,10 @@ public class PositionManager {
     /**
      * Sets the new location of the player on the board
      *      * as a pair of it's x and y position
-     * @param playerX the new x coordinate of the player
-     * @param playerY the new y coordinate of the player
+     * @param newPlayerPosition the new x coordinate of the player
      */
-    public static void setPlayerPosition(int playerX, int playerY) {
-        playerPosition = new int[] {playerX, playerY};
+    public static void setPlayerPosition(int[] newPlayerPosition) {
+        playerPosition = newPlayerPosition;
     }
 
     /**
@@ -90,13 +89,17 @@ public class PositionManager {
         monsterPosition.put(monster, newPosition);
     }
 
+    public static void setItemPosition(Item newItem, int[] position) {
+        itemPosition.put(newItem, position);
+    }
+
     /**
      * Returns the position of an item on the board
      * @param itemToFind Item we are looking for the position of
      * @return the position of the item as an array of Integers representing
      * the x and y coordinates
      */
-    public int[] getItemPosition(Item itemToFind) {
+    public static int[] getItemPosition(Item itemToFind) {
         return itemPosition.get(itemToFind);
     }
 
@@ -108,7 +111,7 @@ public class PositionManager {
      * still exists within the player's inventory
      * @param itemToRemove The item we are removing from the board
      */
-    public void removeItem(Item itemToRemove) {
+    public static void removeItem(Item itemToRemove) {
         itemPosition.remove(itemToRemove);
     }
 

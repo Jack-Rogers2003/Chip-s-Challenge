@@ -1,6 +1,6 @@
 public class PinkBall extends Monster {
     private static final int TICK = 3;
-    private static final String IMAGE_FILE = "pinkball.png";
+    private static final String IMAGE_FILE = "ball.png";
     private String direction;
 
     public PinkBall(String startingDirection) {
@@ -9,6 +9,10 @@ public class PinkBall extends Monster {
 
     public int getTick() {
         return TICK;
+    }
+
+    public String getDirection() {
+        return direction;
     }
 
     public int[] getNextMovement() {

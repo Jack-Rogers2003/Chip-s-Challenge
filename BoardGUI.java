@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Button;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int WINDOW_HEIGHT = 600;
     private static final int WINDOW_WIDTH = 650;
@@ -39,6 +42,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private int tickCount = 0;
     private Text timerText = new Text();
     private Timeline tickTimeline;
+    Board gameBoard;
 
     @Override
     public void start(Stage primaryStage) {
@@ -66,7 +70,10 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
 
     public Scene generateBoard() {
         Pane root = buildGUI();
-        playerImage = new Image(ASSETS_PATH + "player.png");
+        gameBoard = new Board(GameGUIManager.getCurrentLevel());
+        int[] playerPositions = PositionManager.getPlayerPosition();
+        playerX = playerPositions[0];
+        playerY = playerPositions[1];
         timerText = new Text("Current Time: " + TIMER);
         timerText.setStyle(TEXT_STYLE);
         timerText.setTranslateY(50);
@@ -124,11 +131,25 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
                 int[] position = new int[] {x,y};
                 gc.drawImage(new Image(ASSETS_PATH + PositionManager.getTileAt(position).getImageFile()), x * GRID_CELL_WIDTH,
                         y * GRID_CELL_HEIGHT);
+                drawOtherElements(position, gc);
             }
         }
         setPlayerPosition();
-        gc.drawImage(playerImage, playerX * GRID_CELL_WIDTH,
-                playerY * GRID_CELL_HEIGHT);
+        gc.drawImage(new Image(ASSETS_PATH + Player.getImageFile()),
+                playerX * GRID_CELL_WIDTH, playerY * GRID_CELL_HEIGHT);
+    }
+
+    public void drawOtherElements(int[] position, GraphicsContext gc) {
+        ArrayList<Monster> listOfMonsters = gameBoard.getActors().getListOfMonsters();
+        for(int i = 0; i < gameBoard.getActors().getListOfMonsters().size(); i++) {
+            if(PositionManager.getMonsterPosition(listOfMonsters.get(i))[0] ==
+                    position[0] && PositionManager.getMonsterPosition(
+                            listOfMonsters.get(i))[1] == position[1]) {
+                gc.drawImage(new Image(ASSETS_PATH + listOfMonsters.get(i).
+                                getImageFile()), position[0] * GRID_CELL_WIDTH,
+                        position[1] * GRID_CELL_HEIGHT);
+            }
+        }
     }
 
     /**
@@ -146,7 +167,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         } else if (playerX > gridWidth - 1) {
             playerX = gridWidth - 1;
         }
-        PositionManager.setPlayerPosition(playerX, playerY);
+        PositionManager.setPlayerPosition(new int[] {playerX, playerY});
     }
 
     /**

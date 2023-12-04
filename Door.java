@@ -2,15 +2,14 @@ public class Door extends Tile {
   private static final boolean CAN_MOVE_ON = false;
   private final String colour;
   private String imageFile;
-  
 
   public Door(String newColour) {
     colour = newColour;
     switch (colour) {
-      case "R" -> imageFile = "RedDoor.png";
-      case "Y" -> imageFile = "YellowDoor.png";
-      case "G" -> imageFile = "GreenDoor.png";
-      case "B" -> imageFile = "BlueDoor.png";
+      case "R" -> imageFile = "red_door.png";
+      case "Y" -> imageFile = "yellow_door.png";
+      case "G" -> imageFile = "green_door.png";
+      case "B" -> imageFile = "blue_door.png";
     }
   }
 
