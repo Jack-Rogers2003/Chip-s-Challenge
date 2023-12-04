@@ -1,9 +1,9 @@
 /**
  * Class representing the player in the game.
  * The player has specific behaviors like moving based on keyboard input and interacting with game elements.
- * @author Benji Brew, Uzair
- * @version 1.1
- * Added methods to show items held by player and ways to add and remove them as well 
+ * @author Benji Brew, Uzair, Dan Cross
+ *
+ * @version 1.2 
  */
 public class Player extends Actor {
 
@@ -24,6 +24,24 @@ public class Player extends Actor {
         this.highestLevelUnlocked = 1; // Default starting level
         this.onIce = false;
         this.items = new ArrayList<>();
+    }
+
+    /**
+     * @Override method gets the current position of the player.
+     *
+     * @return The current position of the player.
+     */
+    public Integer[] getPosition() {
+        return Position.getPlayerPosition();
+    }
+
+    /**
+     * @Override method sets the position of the player.
+     *
+     * @param nextPosition The new position of the player.
+     */
+    public void setPosition(Integer[] nextPosition) {
+        Position.setPlayerPosition(nextPosition);
     }
 
    /**
