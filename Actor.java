@@ -57,8 +57,6 @@ public class Actor {
      */
     public Integer[] getPosition() {
         return position;
-        // Dan Cross edit: changed the return type to Integer[] as Position is static
-        // and is infact not a position but a collection of all positions.
     }
 
     /**
@@ -66,8 +64,8 @@ public class Actor {
      *
      * @param position The new position of the actor.
      */
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPosition(Integer[] nextPosition) {
+        this.position = nextPosition;
     }
 
     /**
