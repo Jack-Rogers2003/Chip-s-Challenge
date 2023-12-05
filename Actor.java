@@ -6,7 +6,7 @@
  *(I'm not sure whether it will work like I intended so if anyone knows how to better implement a method for such behaiviour would be appreciated)
  *
  * @author Dan Cross, Benji Brew, Uzair
- * @version 1.2 
+ * @version 1.3 
  * 
  * Added 
  */
@@ -35,7 +35,7 @@ public class Actor {
      * Doesnt quite work yet, I'm not too familiar with how you opperate on objects of type Integer
     **/
     public void moveInDirection(String direction) {
-        Integer[] desiredPosition;
+        Integer[] desiredPosition;//represents the position an actor whishes to move to
 
         if (direction == "Up") {
             desiredPosition = [getPosition()[0] + 1, getPosition()[1]];
