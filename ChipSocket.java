@@ -1,5 +1,8 @@
 /**
  * This class creates the ChipSocket tile
+ * Specifies the boolean values relating to the tile and an actor
+ * @author Jack Jones, Benji Brew
+ * @version 1.1
  */
 
 public class ChipSocket extends Tile {
@@ -9,6 +12,7 @@ public class ChipSocket extends Tile {
 
   /**
   * Constructor for ChipSocket tile
+  * @param the number of chips in the chipsocket
   */
   public ChipSocket(int newNumberOfChips) {
     numberOfChips = newNumberOfChips;
