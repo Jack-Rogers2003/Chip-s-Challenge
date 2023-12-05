@@ -12,6 +12,7 @@ public class ChipSocket extends Tile {
 
   /**
   * Constructor for ChipSocket tile
+  *
   * @param the number of chips in the chipsocket
   */
   public ChipSocket(int newNumberOfChips) {
@@ -24,11 +25,11 @@ public class ChipSocket extends Tile {
   }
 
 
-          /**
-     * Gets the int value of the number of chips.
-     *
-     * @return The int value of the number of chips.
-     */
+  /**
+  * Gets the int value of the number of chips.
+  *
+  * @return The int value of the number of chips.
+  */
   public int getNumberOfChips() {
     return numberOfChips;
   }
