@@ -1,5 +1,8 @@
 /**
  * This class creates the Button tile
+ * Specifies whether an actor is allowed to interact with a button
+ * @author Jack Jones, Benji Brew
+ * @version 1.1
  */
 
 public class Button extends Tile {
