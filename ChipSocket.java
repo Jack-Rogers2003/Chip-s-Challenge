@@ -34,20 +34,20 @@ public class ChipSocket extends Tile {
     return numberOfChips;
   }
 
-      /**
-     * Gets the boolean value of whether or not the chipSocket can be moved on.
-     *
-     * @return The boolean value of whether or not the chipSocket can be moved on.
-     */
+  /**
+  * Gets the boolean value of whether or not the chipSocket can be moved on.
+  *
+  * @return The boolean value of whether or not the chipSocket can be moved on.
+  */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
-    /**
-    * Gets the image file of the chipSocket.
-    *
-    * @return The String of the image file of the chipSocket.
-    */
+  /**
+  * Gets the image file of the chipSocket.
+  *
+  * @return The String of the image file of the chipSocket.
+  */
   public String getImageFile() {
     return imageFile;
   }
