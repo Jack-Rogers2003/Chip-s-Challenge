@@ -4,13 +4,16 @@ import java.util.Scanner;
 
 /**
  * Class that handles generating the board and connects elements of it
- * @author Jack Rogers
- * @version 1.0
+ * @author Jack Rogers, Benji Brew
+ * @version 1.1
  */
 public class Board {
+    // Constants for singleton instances of Actor, Position, and Movement
     private static final Actor BOARD_ACTORS = new Actor();
     private static final Position BOARD_POSITIONS = new Position();
     private static final Movement BOARD_MOVEMENT = new Movement();
+
+    // Instance variables
     private final Integer[] boardSize;
     private Tile[] tiles;
 
@@ -18,14 +21,19 @@ public class Board {
      * Constructor for the board class
      * @param fileName String input that is the name of the file that contains
      *                 the details of the current level
+     * @throws FileNotFoundException if the specified file is not found
      */
     public Board(String fileName) throws FileNotFoundException {
         File levelFile = new File(fileName);
         Scanner fileReader = new Scanner(levelFile);
-        boardSize = new Integer[]{Integer.parseInt(fileReader.nextLine(),
-                Integer.parseInt(fileReader.nextLine()))};
-        //Two lines above get the first two lines from the file which are
-        //The height and width of the board, and converts them to an Int
+
+        // Reading the height and width of the board from the file
+        boardSize = new Integer[]{
+                Integer.parseInt(fileReader.nextLine()),
+                Integer.parseInt(fileReader.nextLine())
+        };
+
+        // Processing each line in the file to create the board
         while(fileReader.hasNextLine()) {
             createRow(fileReader.nextLine());
         }
@@ -35,7 +43,7 @@ public class Board {
      * Calls for the movement of a player
      */
     private void getPlayerMovement(){
-
+        // To be implemented
     }
 
     /**
@@ -58,29 +66,31 @@ public class Board {
     /**
      * Creates a row of the board
      * @param fileRow a line in a file that represents a row of the board and
-     *                all objects that are on it
+     * all objects that are on it
      */
     private void createRow(String fileRow) {
         Integer[] currentSquarePosition = new Integer[]{0,0};
         String[] rowElements = fileRow.split("_");
-        for(int i = 0; i <= boardSize[0]; i++) {
+
+        // Iterating through each square in the row
+        for(int i = 0; i < boardSize[0]; i++) {
             String[] propertiesOfSquare = rowElements[i].split("");
             createTile(propertiesOfSquare[0], currentSquarePosition);
             createActorOrItem(propertiesOfSquare[1], currentSquarePosition);
-            currentSquarePosition[1] = currentSquarePosition[1]++;
+            currentSquarePosition[1]++;  // Fix: Incrementing the second coordinate
         }
     }
 
     /**
-    *Checks if what is on the square is an actor, item, or monster and calls
-    *the respective method. This is seperate from the create createRow method 
-    *for readability
+    * Checks if what is on the square is an actor, item, or monster and calls
+    * the respective method. This is separate from the createRow method 
+    * for readability
     * @param actorOrItem String that represents either an actor or Item
     * @param currentSquarePosition the current position of the square we're checking
     */
     public void createActorOrItem(String actorOrItem, 
                                   Integer[] currentSquarePosition) {
-
+        // To be implemented
     }
 
     /**
@@ -88,6 +98,7 @@ public class Board {
      * @param tile tile to be created
      */
     private void createTile(String tile, Integer[] currentSquarePosition) {
+        // To be implemented
     }
 
     /**
@@ -99,14 +110,16 @@ public class Board {
             case "F":
                 BOARD_POSITIONS.setMonsterPosition(new Frog(),
                         currentSquarePosition);
+                break;
             case "PB":
                 BOARD_POSITIONS.setMonsterPosition(new PinkBall(),
                         currentSquarePosition);
+                break;
             case "B":
                 BOARD_POSITIONS.setMonsterPosition(new Bug(),
                         currentSquarePosition);
+                break;
         }
-
     }
 
     /**
@@ -115,12 +128,12 @@ public class Board {
     * @param itemPositon The positon of the item being created on the board
     */
     private void createItem(String item, Integer[] itemPositon) {
-
+        // To be implemented
     }
 
     /**
      * Creates a new player for the board
-     * @param currentSquarePosition the positon of the player
+     * @param playerPositon the position of the player
      */
     private void createPlayer(Integer[] playerPositon) {
         BOARD_POSITIONS.setPlayerPosition(playerPositon);
