@@ -27,7 +27,8 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
     private static final Button LEVEL_1_LEADERBOARDS =
             new Button("Level 1 LeaderBoards");
     private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
-    private static final String LEADERBOARDS_PATH = CURRENT_DIRECTORY + "\\Leaderboards\\";
+    private static final String LEADERBOARDS_PATH = CURRENT_DIRECTORY +
+            "\\src\\main\\java\\Leaderboards\\";
     private static final Button DELETE_PROFILE = new Button("Delete Profile");
     private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 300;

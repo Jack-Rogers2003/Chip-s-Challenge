@@ -6,9 +6,9 @@ public class ChipSocket extends Tile {
   public ChipSocket(int newNumberOfChips) {
     numberOfChips = newNumberOfChips;
     switch (numberOfChips) {
-      case 1 -> imageFile = "ChipSocket1.png";
-      case 2 -> imageFile = "ChipSocket2.png";
-      case 3 -> imageFile = "ChipSocket3.png";
+      case 1 -> imageFile = "chip_socket_1.png";
+      case 2 -> imageFile = "chip_socket_2.png";
+      case 3 -> imageFile = "chip_socket_3.png";
     }
   }
 

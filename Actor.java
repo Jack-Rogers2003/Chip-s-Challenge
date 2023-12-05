@@ -11,8 +11,8 @@ public class Actor {
 
     private PositionManager positionManager;
     private int gameTickMovementInterval;
-    private ArrayList<Monster> monsters = new ArrayList<>();
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Monster> monsters = new ArrayList<>();
+    private final ArrayList<Block> blocks = new ArrayList<>();
 
     public void setNewMonster(Monster toAdd) {
         monsters.add(toAdd);
@@ -20,5 +20,9 @@ public class Actor {
 
     public ArrayList<Monster> getListOfMonsters() {
         return monsters;
+    }
+
+    public void setNewBlock(Block toAdd) {
+        blocks.add(toAdd);
     }
 }

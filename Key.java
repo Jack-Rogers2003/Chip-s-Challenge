@@ -3,7 +3,7 @@ public class Key extends Item {
 
     public Key(String colour) {
         switch (colour) {
-            case "R" -> imageFile = "red_door.png";
+            case "R" -> imageFile = "red_key.png";
             case "Y" -> imageFile = "yellow_key.png";
             case "B" -> imageFile = "blue_key.png";
             case "G" -> imageFile = "green_key.png";

@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,14 +8,13 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Board extends BoardGUI {
-    private static final String LEVEL_FILE_PATH = "C:\\Users\\JayRo\\" +
-            "Documents\\University\\" +
-            "230\\A2_Code\\src\\main\\java\\Levels\\";
+    private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
+    private static final String LEVEL_FILE_PATH = CURRENT_DIRECTORY +
+            "\\src\\main\\java\\Levels\\";
     private static final Movement BOARD_MOVEMENT = new Movement();
-    private static final BoardGUI BOARD_GUI = new BoardGUI();
-    private Actor actors = new Actor();
-    private ArrayList<Button> waitingButton = new ArrayList<>();
-    private ArrayList<Trap> waitingTrap = new ArrayList<>();
+    private final Actor actors = new Actor();
+    private final ArrayList<Button> waitingButton = new ArrayList<>();
+    private final ArrayList<Trap> waitingTrap = new ArrayList<>();
 
 
     /**
@@ -26,7 +24,8 @@ public class Board extends BoardGUI {
      */
     public Board(String levelFile) {
         try {
-            Scanner fileReader = new Scanner(new File(LEVEL_FILE_PATH + levelFile + ".txt"));
+            Scanner fileReader = new Scanner(new File(LEVEL_FILE_PATH
+                    + levelFile + ".txt"));
             BoardGUI.setBoardSize(new int[]{Integer.parseInt(fileReader.nextLine()),
                     Integer.parseInt(fileReader.nextLine())});
             int rowTracker = 0;
@@ -46,16 +45,6 @@ public class Board extends BoardGUI {
     private void getPlayerMovement(){
 
     }
-
-    /**
-     * Returns the actor object that contains the actors of the board
-     * @return returns an Actor
-     */
-    //private Actor getBoardActors(){
-     //   return BOARD_ACTORS;
-   // }
-
-
 
     public Actor getActors() {
         return actors;
@@ -90,15 +79,17 @@ public class Board extends BoardGUI {
     public void createActorOrItem(String actorOrItem, int[] position) {
         String[] toCheck = actorOrItem.split("");
         switch (toCheck[0]) {
-            case "M":
-                createMonster(toCheck, position);
-                break;
-            case "P":
-                PositionManager.setPlayerPosition(position);
-                break;
-            case "I":
-                createItem(toCheck, position);
+            case "M" -> createMonster(toCheck, position);
+            case "P" -> PositionManager.setPlayerPosition(position);
+            case "I" -> createItem(toCheck, position);
+            case "B" -> createBlock(position);
         }
+    }
+
+    public void createBlock(int[] position) {
+        Block block = new Block();
+        actors.setNewBlock(block);
+        PositionManager.setBlockPosition(block, position);
     }
 
     /**
@@ -109,36 +100,24 @@ public class Board extends BoardGUI {
         String[] tileToCheck = tile.split("");
         tile = tileToCheck[0];
         switch (tile) {
-            case "P":
-                PositionManager.setNewTile(new Path(), tilePosition);
-                break;
-            case "D":
-                PositionManager.setNewTile(new Dirt(), tilePosition);
-                break;
-            case "W":
-                PositionManager.setNewTile(new Wall(), tilePosition);
-                break;
-            case "A":
-                PositionManager.setNewTile(new Water(), tilePosition);
-                break;
-            case "E":
-                PositionManager.setNewTile(new Exit(), tilePosition);
-                break;
-            case "I":
-                PositionManager.setNewTile(new Ice(tileToCheck[1]), tilePosition);
-                break;
-            case "B":
+            case "P" -> PositionManager.setNewTile(new Path(), tilePosition);
+            case "D" -> PositionManager.setNewTile(new Dirt(), tilePosition);
+            case "W" -> PositionManager.setNewTile(new Wall(), tilePosition);
+            case "A" -> PositionManager.setNewTile(new Water(), tilePosition);
+            case "E" -> PositionManager.setNewTile(new Exit(), tilePosition);
+            case "I" -> PositionManager.setNewTile(new Ice(tileToCheck[1]), tilePosition);
+            case "O" -> PositionManager.setNewTile(new Door(tileToCheck[1]), tilePosition);
+            case "C" -> PositionManager.setNewTile(new ChipSocket(1), tilePosition);
+            case "B" -> {
                 Button buttonToAdd = new Button();
                 trapWaitingToAttach(buttonToAdd);
                 PositionManager.setNewTile(buttonToAdd, tilePosition);
-                break;
-            case "T":
+            }
+            case "T" -> {
                 Trap trapToAttach = new Trap();
                 buttonWaitingToAttach(trapToAttach);
                 PositionManager.setNewTile(trapToAttach, tilePosition);
-                break;
-            case "O":
-                PositionManager.setNewTile(new Door(tileToCheck[1]), tilePosition);
+            }
         }
     }
 
@@ -169,23 +148,22 @@ public class Board extends BoardGUI {
         if(monster.length == 4) {
             monsterToFind = monster[1] + monster[2];
         }
-        switch (monsterToFind){
-            case "F":
+        switch (monsterToFind) {
+            case "F" -> {
                 Frog newFrog = new Frog();
                 actors.setNewMonster(newFrog);
-                PositionManager.setMonsterPosition(newFrog,
-                        monsterPosition);
-                break;
-            case "PB":
+                PositionManager.setMonsterPosition(newFrog, monsterPosition);
+            }
+            case "PB" -> {
                 PinkBall newBall = new PinkBall(monster[3]);
                 actors.setNewMonster(newBall);
-                PositionManager.setMonsterPosition(newBall,
-                        monsterPosition);
-                break;
-            case "B":
-                PositionManager.setMonsterPosition(new Bug(),
-                        monsterPosition);
-                break;
+                PositionManager.setMonsterPosition(newBall, monsterPosition);
+            }
+            case "B" -> {
+                Bug newBug = new Bug(monster[2]);
+                actors.setNewMonster(newBug);
+                PositionManager.setMonsterPosition(newBug, monsterPosition);
+            }
         }
     }
 
@@ -195,10 +173,10 @@ public class Board extends BoardGUI {
     * @param itemPosition The position of the item being created on the board
     */
     private void createItem(String[] item, int[] itemPosition) {
-        String itemToFind = item[0];
+        String itemToFind = item[1];
         switch (itemToFind) {
             case "C" -> PositionManager.setItemPosition(new Chip(), itemPosition);
-            case "K" -> PositionManager.setItemPosition(new Key(item[1]), itemPosition);
+            case "K" -> PositionManager.setItemPosition(new Key(item[2]), itemPosition);
         }
     }
 

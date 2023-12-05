@@ -12,16 +12,12 @@ import java.util.HashMap;
 public class PositionManager {
     private static int[] playerPosition;
     private static HashMap <Object, int[]> monsterPosition = new HashMap<>();
-    public static HashMap <Item, int[]> itemPosition = new HashMap<>();
-    private static int[] blockPosition;
-    public static ArrayList<ArrayList<Tile>> tilePosition = new ArrayList<>();
+    private static HashMap <Item, int[]> itemPosition = new HashMap<>();
+    private static HashMap <Block, int[]> blockPosition = new HashMap<>();
+    private static ArrayList<ArrayList<Tile>> tilePosition = new ArrayList<>();
     private static ArrayList<ArrayList<Object[]>> squareProperties =
             new ArrayList<>();
 
-    public static void createNewRow() {
-        ArrayList<Object[]> newRow = new ArrayList<>();
-        squareProperties.add(newRow);
-    }
 
     /**
      * Returns the properties of a Square, inlcuding it's tile and anything
@@ -103,6 +99,11 @@ public class PositionManager {
         return itemPosition.get(itemToFind);
     }
 
+    public static HashMap <Item, int[]> getListOfItems() {
+        return itemPosition;
+    }
+
+
     /**
      * This method removes an item from the HashMap of itemPosition
      * The reason it is removed rather than simply moved is that once an item
@@ -120,8 +121,8 @@ public class PositionManager {
     * @return the position of block as an Array of Integers containing its
     * X and Y coordinate
     */
-    public int[] getBlockPosition() {
-        return blockPosition;
+    public static int[] getBlockPosition(Block blockToFind) {
+        return blockPosition.get(blockToFind);
     }
 
     /**
@@ -129,8 +130,12 @@ public class PositionManager {
     * @param newPosition the new position of the block as an Array of Integers
     * representing its X and Y coordinate 
     */
-    public void setBlockPosition(int[] newPosition) {
-        blockPosition = newPosition;
+    public static void setBlockPosition(Block newBlock, int[] newPosition) {
+        blockPosition.put(newBlock, newPosition);
+    }
+
+    public static HashMap<Block, int[]> getBlockPosition() {
+        return blockPosition;
     }
 
     /**
@@ -149,7 +154,7 @@ public class PositionManager {
      * adds, this is to work around that the arraylist needs to be
      * initialised with a tile object already inside
      * @param tileCreated the Tile object that is to be created
-     * @param position an array of ints cotaining the x and y coordinate of
+     * @param position an array of ints containing the x and y coordinate of
      *                 the tile
      */
     public static void setNewTile(Tile tileCreated, int[] position) {
@@ -160,6 +165,10 @@ public class PositionManager {
         } else {
             tilePosition.get(position[0]).add(position[1], tileCreated);
         }
+    }
+
+    public static ArrayList<ArrayList<Tile>> getTileList() {
+        return tilePosition;
     }
 
 }

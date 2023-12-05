@@ -17,9 +17,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Button;
-
+import java.util.Map.Entry;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
 public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int WINDOW_HEIGHT = 600;
@@ -30,19 +30,19 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int GRID_CELL_HEIGHT = 50;
     private static final Button EXIT_BUTTON = new Button("Exit");
     private static final int TIMER = 100;
-    private static final String ASSETS_PATH = "file:C:\\Users\\JayRo\\" +
-            "Documents\\University\\230\\A2_Code\\src\\main\\java\\assets\\";
+    private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
+    private static final String ASSETS_PATH = "file:" + CURRENT_DIRECTORY + "\\src\\main\\java\\assets\\";
     private static final String TEXT_STYLE = "-fx-font: 24 arial;";
     private static int gridWidth;
     private static int gridHeight;
     private Canvas board;
     private int playerX = 0;
     private int playerY = 0;
-    private Image playerImage;
     private int tickCount = 0;
     private Text timerText = new Text();
     private Timeline tickTimeline;
-    Board gameBoard;
+    private Board gameBoard;
+    private static String nextPlayerMove = "";
 
     @Override
     public void start(Stage primaryStage) {
@@ -79,7 +79,8 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         timerText.setTranslateY(50);
         timerText.setTranslateX(200);
         root.getChildren().add(timerText);
-        tickTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> tick()));
+        tickTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event ->
+                tick()));
         tickTimeline.setCycleCount(Animation.INDEFINITE);
         tickTimeline.play();
         drawGame();
@@ -129,8 +130,9 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         for (int y = 0; y < gridHeight; y++) {
             for(int x = 0; x < gridWidth; x++){
                 int[] position = new int[] {x,y};
-                gc.drawImage(new Image(ASSETS_PATH + PositionManager.getTileAt(position).getImageFile()), x * GRID_CELL_WIDTH,
-                        y * GRID_CELL_HEIGHT);
+                gc.drawImage(new Image(ASSETS_PATH + PositionManager.
+                                getTileAt(position).getImageFile()), x *
+                                GRID_CELL_WIDTH, y * GRID_CELL_HEIGHT);
                 drawOtherElements(position, gc);
             }
         }
@@ -140,13 +142,35 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     }
 
     public void drawOtherElements(int[] position, GraphicsContext gc) {
-        ArrayList<Monster> listOfMonsters = gameBoard.getActors().getListOfMonsters();
-        for(int i = 0; i < gameBoard.getActors().getListOfMonsters().size(); i++) {
+        ArrayList<Monster> listOfMonsters = gameBoard.getActors().
+                getListOfMonsters();
+        for(int i = 0; i < gameBoard.getActors().getListOfMonsters().
+                size(); i++) {
             if(PositionManager.getMonsterPosition(listOfMonsters.get(i))[0] ==
                     position[0] && PositionManager.getMonsterPosition(
                             listOfMonsters.get(i))[1] == position[1]) {
                 gc.drawImage(new Image(ASSETS_PATH + listOfMonsters.get(i).
                                 getImageFile()), position[0] * GRID_CELL_WIDTH,
+                        position[1] * GRID_CELL_HEIGHT);
+            }
+        }
+        HashMap<Item, int[]> itemList = PositionManager.getListOfItems();
+        for(Entry<Item, int[]> entry: itemList.entrySet()) {
+            int[] itemPosition = entry.getValue();
+            if(itemPosition[0] == position[0] &&
+                    itemPosition[1] == position[1]) {
+                gc.drawImage(new Image(ASSETS_PATH +
+                                entry.getKey().getImageFile()), position[0] *
+                        GRID_CELL_WIDTH, position[1] * GRID_CELL_HEIGHT);
+            }
+        }
+        HashMap<Block, int[]> blockList = PositionManager.getBlockPosition();
+        for(Entry<Block, int[]> entry: blockList.entrySet()) {
+            int[] blockPosition = entry.getValue();
+            if (blockPosition[0] == position[0] &&
+                    blockPosition[1] == position[1]) {
+                gc.drawImage(new Image(ASSETS_PATH + entry.getKey().
+                        getImageFile()), position[0] * GRID_CELL_WIDTH,
                         position[1] * GRID_CELL_HEIGHT);
             }
         }
