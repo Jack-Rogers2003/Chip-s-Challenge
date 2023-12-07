@@ -1,15 +1,18 @@
 /**
- * This class creates the Door tile
- */
+  * This class creates the Door tile
+  * @author Jack Jones, Benji Brew
+  * @version 1.1
+  */
 
 public class Door extends Tile {
   private static final boolean CAN_MOVE_ON = false;
   private final String colour;
   private String imageFile;
   
-/**
-* Constructor for the Door tile
-*/
+  /**
+    * Constructor for the Door tile
+    * @param newColour the colour of the door
+    */
   public Door(String newColour) {
     colour = newColour;
     switch (colour) {
@@ -20,7 +23,7 @@ public class Door extends Tile {
     }
   }
 
-      /**
+  /**
     * Gets the image file of the door.
     *
     * @return The String of the image file of the door.
@@ -29,16 +32,16 @@ public class Door extends Tile {
     return imageFile;
   }
 
-        /**
-     * Gets the boolean value of whether or not the door can be moved on.
-     *
-     * @return The boolean value of whether or not the door can be moved on.
-     */
+  /**
+    * Gets the boolean value of whether or not the door can be moved on.
+    *
+    * @return The boolean value of whether or not the door can be moved on.
+    */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
-      /**
+  /**
     * Gets the colour of the door.
     *
     * @return The String of the colour of the door.
