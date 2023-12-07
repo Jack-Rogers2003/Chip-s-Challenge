@@ -83,8 +83,7 @@ public class Board {
     }
 
     public void createBlock(int[] position) {
-        Block block = new Block();
-        ACTOR.setNewBlock(block);
+        ACTOR.setNewBlock();
         PositionManager.setBlockPosition(block, position);
     }
 
