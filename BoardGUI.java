@@ -86,7 +86,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
 
     public Scene generateBoard() {
         Pane root = buildGUI();
-        Board gameBoard = new Board(GameGUIManager.getCurrentLevel());
+        new Board(GameGUIManager.getCurrentLevel());
         timerText = new Text("Current Time: " + TIMER);
         timerText.setStyle(TEXT_STYLE);
         timerText.setTranslateY(50);
@@ -174,6 +174,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
      * Calls for the game to be restarted
      */
     public void restartGame() {
+        tickCount = 0;
         GameGUIManager.isBoardWindowNext = true;
         GameGUIManager.windowChange();
     }
@@ -304,6 +305,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         Stage window = ((Stage) EXIT_BUTTON.getScene().getWindow());
         if(event.getSource() == EXIT_BUTTON) {
             tickTimeline.stop();
+            tickCount = 0;
             GameGUIManager.isLevelSelectorWindowNext = true;
             window.close();
             GameGUIManager.windowChange();
