@@ -11,7 +11,6 @@ public class GameGUIManager extends Application {
     public static boolean isBoardWindowNext = false;
     private static final ProfileSelectorWindow PROFILE_SELECTOR_WINDOW = new ProfileSelectorWindow();
     private static final Stage WINDOW = new Stage();
-    private static final LevelSelector LEVEL_SELECTOR_WINDOW = new LevelSelector();
     private static String currentProfile = "";
     private static String currentLevel = "";
 
@@ -65,7 +64,8 @@ public class GameGUIManager extends Application {
      * Handles opening of the Level Selector window
      */
     private static void openLevelSelectorWindow() {
-        Scene levelSelectWindow = LEVEL_SELECTOR_WINDOW.generateMenu();
+        LevelSelector levelSelector = new LevelSelector();
+        Scene levelSelectWindow = levelSelector.generateMenu();
         WINDOW.setTitle("Welcome " + getCurrentProfile());
         WINDOW.setScene(levelSelectWindow);
         WINDOW.show();

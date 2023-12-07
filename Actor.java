@@ -9,8 +9,6 @@ import java.util.ArrayList;
  */
 public class Actor {
 
-    private PositionManager positionManager;
-    private int gameTickMovementInterval;
     private final ArrayList<Monster> monsters = new ArrayList<>();
     private final ArrayList<Block> blocks = new ArrayList<>();
 
@@ -24,5 +22,10 @@ public class Actor {
 
     public void setNewBlock(Block toAdd) {
         blocks.add(toAdd);
+    }
+
+    public void reset() {
+        monsters.clear();
+        blocks.clear();
     }
 }

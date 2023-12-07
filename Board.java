@@ -7,12 +7,11 @@ import java.util.Scanner;
  * @author Jack Rogers
  * @version 1.0
  */
-public class Board extends BoardGUI {
+public class Board {
     private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
     private static final String LEVEL_FILE_PATH = CURRENT_DIRECTORY +
             "\\src\\main\\java\\Levels\\";
-    private static final Movement BOARD_MOVEMENT = new Movement();
-    private final Actor actors = new Actor();
+    private static final Actor ACTOR = new Actor();
     private final ArrayList<Button> waitingButton = new ArrayList<>();
     private final ArrayList<Trap> waitingTrap = new ArrayList<>();
 
@@ -29,6 +28,9 @@ public class Board extends BoardGUI {
             BoardGUI.setBoardSize(new int[]{Integer.parseInt(fileReader.nextLine()),
                     Integer.parseInt(fileReader.nextLine())});
             int rowTracker = 0;
+            Player.resetItems();
+            PositionManager.resetPositions();
+            ACTOR.reset();
             while (fileReader.hasNextLine()) {
                 createRow(fileReader.nextLine(), rowTracker);
                 rowTracker++;
@@ -39,15 +41,9 @@ public class Board extends BoardGUI {
         }
     }
 
-    /**
-     * Calls for the movement of a player
-     */
-    private void getPlayerMovement(){
 
-    }
-
-    public Actor getActors() {
-        return actors;
+    public static Actor getActors() {
+        return ACTOR;
     }
 
     /**
@@ -88,7 +84,7 @@ public class Board extends BoardGUI {
 
     public void createBlock(int[] position) {
         Block block = new Block();
-        actors.setNewBlock(block);
+        ACTOR.setNewBlock(block);
         PositionManager.setBlockPosition(block, position);
     }
 
@@ -151,17 +147,17 @@ public class Board extends BoardGUI {
         switch (monsterToFind) {
             case "F" -> {
                 Frog newFrog = new Frog();
-                actors.setNewMonster(newFrog);
+                ACTOR.setNewMonster(newFrog);
                 PositionManager.setMonsterPosition(newFrog, monsterPosition);
             }
             case "PB" -> {
                 PinkBall newBall = new PinkBall(monster[3]);
-                actors.setNewMonster(newBall);
+                ACTOR.setNewMonster(newBall);
                 PositionManager.setMonsterPosition(newBall, monsterPosition);
             }
             case "B" -> {
                 Bug newBug = new Bug(monster[2]);
-                actors.setNewMonster(newBug);
+                ACTOR.setNewMonster(newBug);
                 PositionManager.setMonsterPosition(newBug, monsterPosition);
             }
         }

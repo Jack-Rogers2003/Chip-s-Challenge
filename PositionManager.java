@@ -15,37 +15,17 @@ public class PositionManager {
     private static HashMap <Item, int[]> itemPosition = new HashMap<>();
     private static HashMap <Block, int[]> blockPosition = new HashMap<>();
     private static ArrayList<ArrayList<Tile>> tilePosition = new ArrayList<>();
-    private static ArrayList<ArrayList<Object[]>> squareProperties =
-            new ArrayList<>();
-
 
     /**
-     * Returns the properties of a Square, inlcuding it's tile and anything
-     * that may be also on it
-     * @param x the x coordinate of the square being searched
-     * @param y the y coordinate of the square being so searched
-     * @return An array containing the objects stored in the square
+     * Used for when first generating the game, sets all attributes to empty,
+     * this is to prevent possible bugs or issues when transferring from one
+     * level to another, such as a player's collected items carrying over
      */
-    public static Object[] getSquareProperties(int x, int y) {
-        return squareProperties.get(x).get(y);
-    }
-
-    /**
-     * Adds to positions the properties of the next square
-     * @param row the row to be added to
-     * @param onSquare what's on the square, contains two objects, the first
-     *                 being the tile of the square, and the second being one
-     *                 of a Monster, Player, or Item that is on the square
-     */
-    public static void addSquareProperties(int row, Object[] onSquare) {
-        ArrayList<Object[]> rowToAddTo = squareProperties.get(row);
-        Object[] properties = {onSquare};
-        rowToAddTo.add(properties);
-    }
-
-
-    public static void changeSquareProperties() {
-
+    public static void resetPositions() {
+        tilePosition.clear();
+        blockPosition.clear();
+        itemPosition.clear();
+        monsterPosition.clear();
     }
 
     /**
@@ -89,20 +69,9 @@ public class PositionManager {
         itemPosition.put(newItem, position);
     }
 
-    /**
-     * Returns the position of an item on the board
-     * @param itemToFind Item we are looking for the position of
-     * @return the position of the item as an array of Integers representing
-     * the x and y coordinates
-     */
-    public static int[] getItemPosition(Item itemToFind) {
-        return itemPosition.get(itemToFind);
-    }
-
     public static HashMap <Item, int[]> getListOfItems() {
         return itemPosition;
     }
-
 
     /**
      * This method removes an item from the HashMap of itemPosition
@@ -165,6 +134,10 @@ public class PositionManager {
         } else {
             tilePosition.get(position[0]).add(position[1], tileCreated);
         }
+    }
+
+    public static void changeTile(Tile tileToAdd, int[] position) {
+        tilePosition.get(position[0]).set(position[1], tileToAdd);
     }
 
     public static ArrayList<ArrayList<Tile>> getTileList() {

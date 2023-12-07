@@ -9,6 +9,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 /**
@@ -29,10 +31,13 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
     private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
     private static final String LEADERBOARDS_PATH = CURRENT_DIRECTORY +
             "\\src\\main\\java\\Leaderboards\\";
+    private static final String PROFILES_PATH = CURRENT_DIRECTORY +
+            "\\src\\main\\java\\PlayerProfiles\\";
     private static final Button DELETE_PROFILE = new Button("Delete Profile");
     private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 300;
     private static Stage window;
+    private static int unlockedLevels;
 
     /**
      * @param levelSelectWindow the primary stage for this application,
@@ -45,14 +50,39 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
 
     }
 
+    public static void updateUnlockedLevels(int levelCompleted) {
+        if(levelCompleted != 5) {
+            if (levelCompleted == unlockedLevels) {
+                unlockedLevels = unlockedLevels + 1;
+                try {
+                    FileWriter toUpdate = new FileWriter(PROFILES_PATH + GameGUIManager.getCurrentProfile() + ".txt");
+                    toUpdate.write(Integer.toString(unlockedLevels));
+                    toUpdate.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            buttonEnable();
+        }
+    }
+
     /**
      * Generates a window and all of it's properties
      * @return A scene that is all Buttons and text needed for the window
      */
     public Scene generateMenu() {
         setButtonProperties();
+        try {
+            File toGetLevelsFrom = new File(PROFILES_PATH + GameGUIManager.getCurrentProfile() + ".txt");
+            Scanner fileReader = new Scanner(toGetLevelsFrom);
+            unlockedLevels = Integer.parseInt(fileReader.nextLine());
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         StackPane layout = new StackPane();
-        buttonEnableOrDisable();
+        buttonDisable();
+        buttonEnable();
         layout.getChildren().add(WINDOW_HEADER);
         layout.getChildren().add(BACK_BUTTON);
         layout.getChildren().add(DELETE_PROFILE);
@@ -79,9 +109,13 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         LEVEL_1.setTranslateY(-90);
         LEVEL_1.setOnAction(this);
         LEVEL_2.setTranslateY(-50);
+        LEVEL_2.setOnAction(this);
         LEVEL_3.setTranslateY(-10);
+        LEVEL_3.setOnAction(this);
         LEVEL_4.setTranslateY(30);
+        LEVEL_4.setOnAction(this);
         LEVEL_5.setTranslateY(70);
+        LEVEL_5.setOnAction(this);
     }
 
     /**
@@ -110,7 +144,7 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
     }
 
     public void leaderboardOrLevel(ActionEvent event) {
-        if(event.getSource() == LEVEL_1) {
+        if(event.getSource() == LEVEL_1 || event.getSource() == LEVEL_2) {
             String levelToLoad = loadLevel(event.getSource());
             GameGUIManager.setCurrentLevel(levelToLoad);
             GameGUIManager.isBoardWindowNext = true;
@@ -129,19 +163,33 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         }
         return level;
     }
-    public void buttonEnableOrDisable() {
-        int levelsCompleted = Game.getCompletedLevels(GameGUIManager.
-                getCurrentProfile());
-        if(levelsCompleted < 2) {
+
+    public static void buttonEnable() {
+        if(unlockedLevels >= 2) {
+            LEVEL_2.setDisable(false);
+        }
+        if (unlockedLevels >= 3) {
+            LEVEL_3.setDisable(false);
+        }
+        if (unlockedLevels >= 4) {
+            LEVEL_4.setDisable(false);
+        }
+        if (unlockedLevels >= 5) {
+            LEVEL_5.setDisable(false);;
+        }
+    }
+
+    public void buttonDisable() {
+        if(unlockedLevels < 2) {
             LEVEL_2.setDisable(true);
         }
-        if (levelsCompleted < 3) {
+        if (unlockedLevels < 3) {
             LEVEL_3.setDisable(true);
         }
-        if (levelsCompleted < 4) {
+        if (unlockedLevels < 4) {
             LEVEL_4.setDisable(true);
         }
-        if (levelsCompleted < 5) {
+        if (unlockedLevels < 5) {
             LEVEL_5.setDisable(true);
         }
     }

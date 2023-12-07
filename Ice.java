@@ -8,8 +8,8 @@ public class Ice extends Tile {
     switch (corner) {
       case "B" -> imageFile = "BottomRightIce.png";
       case "L" -> imageFile = "BottomLeftIce.png";
-      case "T" -> imageFile = "TopRightIce.png";
-      case "R" -> imageFile = "TopLeftIce.png";
+      case "R" -> imageFile = "TopRightIce.png";
+      case "T" -> imageFile = "TopLeftIce.png";
       case "N" -> imageFile = "Ice.png";
     }
   }

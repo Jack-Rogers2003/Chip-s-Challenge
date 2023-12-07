@@ -17,9 +17,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Button;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int WINDOW_HEIGHT = 600;
@@ -30,23 +29,30 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int GRID_CELL_HEIGHT = 50;
     private static final Button EXIT_BUTTON = new Button("Exit");
     private static final int TIMER = 100;
-    private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
-    private static final String ASSETS_PATH = "file:" + CURRENT_DIRECTORY + "\\src\\main\\java\\assets\\";
+    private static final String CURRENT_DIRECTORY =
+            System.getProperty("user.dir");
+    private static final String ASSETS_PATH = "file:" + CURRENT_DIRECTORY +
+            "\\src\\main\\java\\assets\\";
     private static final String TEXT_STYLE = "-fx-font: 24 arial;";
+    private final Movement movement = new Movement();
     private static int gridWidth;
     private static int gridHeight;
+    private static boolean gameHasEnded = false;
+    private static String endCause;
     private Canvas board;
-    private int playerX = 0;
-    private int playerY = 0;
-    private int tickCount = 0;
+
+    private static int tickCount = 0;
     private Text timerText = new Text();
     private Timeline tickTimeline;
-    private Board gameBoard;
     private static String nextPlayerMove = "";
 
     @Override
     public void start(Stage primaryStage) {
 
+    }
+
+    public static int getTickCount() {
+        return tickCount;
     }
 
     /**
@@ -57,6 +63,16 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     public static void setBoardSize(int[] sizes) {
         gridWidth = sizes[0];
         gridHeight = sizes[1];
+    }
+
+    public static void setGameEnd(String gameEnder) {
+        gameHasEnded = true;
+        endCause = gameEnder;
+    }
+
+    public static void resetGameEnders() {
+        gameHasEnded = false;
+        endCause = null;
     }
 
     /**
@@ -70,10 +86,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
 
     public Scene generateBoard() {
         Pane root = buildGUI();
-        gameBoard = new Board(GameGUIManager.getCurrentLevel());
-        int[] playerPositions = PositionManager.getPlayerPosition();
-        playerX = playerPositions[0];
-        playerY = playerPositions[1];
+        Board gameBoard = new Board(GameGUIManager.getCurrentLevel());
         timerText = new Text("Current Time: " + TIMER);
         timerText.setStyle(TEXT_STYLE);
         timerText.setTranslateY(50);
@@ -100,7 +113,49 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         if (TIMER == tickCount) {
             tickTimeline.stop();
             endGamePopup();
+        } else if (tickCount % Player.getTickCount() == 0) {
+            nextPlayerMove();
         }
+        if(gameHasEnded) {
+            endGame();
+        }
+    }
+
+    public void endGame() {
+        switch (endCause) {
+            case "Exit" -> gameWonPopup();
+            case "Water" -> waterDeath();
+            case "Frog", "Bug", "Pink Ball" -> monsterDeath(endCause);
+            case "Block" -> blockDeath();
+        }
+    }
+
+    public void blockDeath() {
+        Alert timeHasRunOut = new Alert(Alert.AlertType.INFORMATION);
+        timeHasRunOut.setHeaderText("You were crushed by a block! Try again");
+        tickTimeline.stop();
+        resetGameEnders();
+        timeHasRunOut.setOnHidden(event -> restartGame());
+        timeHasRunOut.show();
+    }
+
+    public void monsterDeath(String monster) {
+        Alert timeHasRunOut = new Alert(Alert.AlertType.INFORMATION);
+        timeHasRunOut.setHeaderText("You were killed by a " + monster + "! Try again");
+        tickTimeline.stop();
+        resetGameEnders();
+        timeHasRunOut.setOnHidden(event -> restartGame());
+        timeHasRunOut.show();
+    }
+
+
+    public void waterDeath() {
+        Alert timeHasRunOut = new Alert(Alert.AlertType.INFORMATION);
+        timeHasRunOut.setHeaderText("You've drowned! Try again");
+        tickTimeline.stop();
+        resetGameEnders();
+        timeHasRunOut.setOnHidden(event -> restartGame());
+        timeHasRunOut.show();
     }
 
     /**
@@ -110,6 +165,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         Alert timeHasRunOut = new Alert(Alert.AlertType.INFORMATION);
         timeHasRunOut.setHeaderText("You've lost, try again");
         tickTimeline.stop();
+        resetGameEnders();
         timeHasRunOut.setOnHidden(event -> restartGame());
         timeHasRunOut.show();
     }
@@ -128,23 +184,23 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, board.getWidth(), board.getHeight());
         for (int y = 0; y < gridHeight; y++) {
-            for(int x = 0; x < gridWidth; x++){
-                int[] position = new int[] {x,y};
+            for (int x = 0; x < gridWidth; x++) {
+                int[] position = new int[]{x, y};
                 gc.drawImage(new Image(ASSETS_PATH + PositionManager.
-                                getTileAt(position).getImageFile()), x *
-                                GRID_CELL_WIDTH, y * GRID_CELL_HEIGHT);
+                        getTileAt(position).getImageFile()), x *
+                        GRID_CELL_WIDTH, y * GRID_CELL_HEIGHT);
                 drawOtherElements(position, gc);
             }
         }
-        setPlayerPosition();
+        int[] playerPos = PositionManager.getPlayerPosition();
         gc.drawImage(new Image(ASSETS_PATH + Player.getImageFile()),
-                playerX * GRID_CELL_WIDTH, playerY * GRID_CELL_HEIGHT);
+                playerPos[0] * GRID_CELL_WIDTH, playerPos[1] * GRID_CELL_HEIGHT);
     }
 
     public void drawOtherElements(int[] position, GraphicsContext gc) {
-        ArrayList<Monster> listOfMonsters = gameBoard.getActors().
+        ArrayList<Monster> listOfMonsters = Board.getActors().
                 getListOfMonsters();
-        for(int i = 0; i < gameBoard.getActors().getListOfMonsters().
+        for(int i = 0; i < Board.getActors().getListOfMonsters().
                 size(); i++) {
             if(PositionManager.getMonsterPosition(listOfMonsters.get(i))[0] ==
                     position[0] && PositionManager.getMonsterPosition(
@@ -181,17 +237,12 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
      * adjusts it if so
      * This may be removed once Movement is fully implemented
      */
-    public void setPlayerPosition() {
-        if (playerY < 0) {
-            playerY = 0;
-        } else if (playerY > gridHeight - 1) {
-            playerY = gridHeight - 1;
-        } else if (playerX < 0) {
-            playerX = 0;
-        } else if (playerX > gridWidth - 1) {
-            playerX = gridWidth - 1;
+    public void nextPlayerMove() {
+        if(!Objects.equals(nextPlayerMove, "")) {
+            movement.playerMovement(nextPlayerMove);
+            nextPlayerMove = "";
+            drawGame();
         }
-        PositionManager.setPlayerPosition(new int[] {playerX, playerY});
     }
 
     /**
@@ -213,14 +264,35 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
      * @param event Key that has been pressed
      */
     public void setForKeyEvent(KeyEvent event) {
-
-        switch (event.getCode()) {
-            case UP, W -> playerY = playerY - 1;
-            case LEFT, A -> playerX = playerX - 1;
-            case DOWN, S -> playerY = playerY + 1;
-            case RIGHT, D -> playerX = playerX + 1;
+        if(Objects.equals(nextPlayerMove, "")) {
+            switch (event.getCode()) {
+                case UP, W -> nextPlayerMove = "U";
+                case LEFT, A -> nextPlayerMove = "L";
+                case DOWN, S -> nextPlayerMove = "D";
+                case RIGHT, D -> nextPlayerMove = "R";
+            }
         }
-        drawGame();
+    }
+
+    public void gameWonPopup() {
+        Alert gameWonPopup = new Alert(Alert.AlertType.CONFIRMATION);
+        gameWonPopup.setTitle("Level complete!");
+        gameWonPopup.setHeaderText("You have completed the level! Well done!");
+        tickTimeline.stop();
+        gameWonPopup.setOnHidden(event -> finishLevel());
+        gameWonPopup.show();
+    }
+
+    public void finishLevel() {
+        String currentLevel = GameGUIManager.getCurrentLevel();
+        int intCurrentLevel = Integer.parseInt(currentLevel.substring(
+                currentLevel.length() - 1));
+        LevelSelector.updateUnlockedLevels(intCurrentLevel);
+        GameGUIManager.isLevelSelectorWindowNext = true;
+        resetGameEnders();
+        ((Stage) EXIT_BUTTON.getScene().getWindow()).close();
+        GameGUIManager.windowChange();
+
     }
 
     /**
