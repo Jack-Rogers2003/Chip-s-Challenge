@@ -20,8 +20,9 @@ public class Actor {
         return monsters;
     }
 
-    public void setNewBlock(Block toAdd) {
-        blocks.add(toAdd);
+    public void setNewBlock() {
+        Block block = new Block();
+        blocks.add(block);
     }
 
     public void reset() {
