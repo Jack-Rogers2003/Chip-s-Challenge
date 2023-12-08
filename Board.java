@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 /**
  * Class that handles generating the board and connects elements of it
- * @author Jack Rogers
- * @version 1.0
+ * @author Jack Rogers, Benji Brew
+ * @version 1.1
  */
 public class Board {
     private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
@@ -19,7 +19,7 @@ public class Board {
     /**
      * Constructor for the board class
      * @param levelFile String input that is the name of the file that contains
-     *                 the details of the current level
+     * the details of the current level
      */
     public Board(String levelFile) {
         try {
@@ -49,7 +49,8 @@ public class Board {
     /**
      * Creates a row of the board
      * @param fileRow a line in a file that represents a row of the board and
-     *                all objects that are on it
+     * all objects that are on it
+     * @param nextRow the position of the next row
      */
     private void createRow(String fileRow, int nextRow) {
         String[] rowElements = fileRow.split("_");
@@ -66,9 +67,9 @@ public class Board {
     }
 
     /**
-    *Checks if what is on the square is an actor, item, or monster and calls
-    *the respective method. This is separate from the create createRow method
-    *for readability
+    * Checks if what is on the square is an actor, item, or monster and calls
+    * the respective method. This is separate from the create createRow method
+    * for readability
     * @param actorOrItem String that represents either an actor or Item
     * @param position position of the actor or item to be created
     */
@@ -82,6 +83,11 @@ public class Board {
         }
     }
 
+    /**
+     * Method that creates a block and specifies its position
+     *
+     * @param position the position of the new block
+     */
     public void createBlock(int[] position) {
         ACTOR.setNewBlock();
         PositionManager.setBlockPosition(block, position);
@@ -116,6 +122,11 @@ public class Board {
         }
     }
 
+    /**
+     * Method that checks if a button should be attatched
+     *
+     * @param trapToAttatch the trap for the button to be attatched to
+    */
     public void buttonWaitingToAttach(Trap trapToAttach) {
         if(waitingButton.size() > 0) {
             trapToAttach.setConnectedButton(waitingButton.get(0));
@@ -125,6 +136,11 @@ public class Board {
         }
     }
 
+    /**
+     * Method that checks if a trap should be attatched
+     *
+     * @param buttonToAttatch the button for the trap to be attatched to
+    */
     public void trapWaitingToAttach(Button buttonToAttach) {
         if(waitingTrap.size() > 0) {
             waitingTrap.get(0).setConnectedButton(buttonToAttach);
