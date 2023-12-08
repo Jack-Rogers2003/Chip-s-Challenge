@@ -1,5 +1,7 @@
 /**
  * This class creates the Ice tile
+ * Specifies the conditions an ice tile creates
+ * @author Jack Jones, Benji Brew
  */
 
 public class Ice extends Tile {
@@ -8,8 +10,10 @@ public class Ice extends Tile {
   private final String corner;
 
   /**
-  * Constructor for the Ice tile
-  */
+   * Constructor for the Ice tile
+   *
+   * @param newCorner an instance of a corner tile
+   */
   public Ice(String newCorner) {
     corner = newCorner;
     switch (corner) {
