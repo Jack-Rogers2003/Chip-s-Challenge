@@ -2,6 +2,7 @@
  * This class creates the Ice tile
  * Specifies the conditions an ice tile creates
  * @author Jack Jones, Benji Brew
+ * @version 1.1
  */
 
 public class Ice extends Tile {
