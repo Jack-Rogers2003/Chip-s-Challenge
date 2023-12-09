@@ -24,9 +24,17 @@ public class Key extends Item {
         }
     }
 
+    /**
+    * Method that returns the imageFile value
+    **/
+
     public String getImageFile() {
         return imageFile;
     }
+
+    /**
+    * Method that returns the colour value
+    **/
 
     public String getColour() {
         return colour;
