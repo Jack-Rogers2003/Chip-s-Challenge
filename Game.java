@@ -21,6 +21,8 @@ public class Game {
             = new File(CURRENT_DIRECTORY + "\\PlayerProfiles\\");
     private static final File LEADERBOARDS_FILE_PATH
             = new File(CURRENT_DIRECTORY + "\\Leaderboards\\");
+    private static final File ASSETS_PATH = new File(CURRENT_DIRECTORY +
+            "\\assets\\");
 
     public Game() {
         if(!LEVELS_FILE_PATH.exists()) {
@@ -31,6 +33,8 @@ public class Game {
         }
         if (!LEADERBOARDS_FILE_PATH.exists()) {
             LEADERBOARDS_FILE_PATH.mkdir();
+        } if (ASSETS_PATH.mkdir()) {
+            ASSETS_PATH.mkdir();
         }
     }
 
