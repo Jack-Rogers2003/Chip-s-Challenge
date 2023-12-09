@@ -28,23 +28,22 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     private static final int GRID_CELL_WIDTH = 50;
     private static final int GRID_CELL_HEIGHT = 50;
     private static final Button EXIT_BUTTON = new Button("Exit");
-    private static final int TIMER = 100;
     private static final String CURRENT_DIRECTORY =
             System.getProperty("user.dir");
     private static final String ASSETS_PATH = "file:" + CURRENT_DIRECTORY +
-            "\\src\\main\\java\\assets\\";
+            "\\assets\\";
     private static final String TEXT_STYLE = "-fx-font: 24 arial;";
     private final Movement movement = new Movement();
     private static int gridWidth;
     private static int gridHeight;
     private static boolean gameHasEnded = false;
     private static String endCause;
-    private Canvas board;
-
     private static int tickCount = 0;
+    private static int timer;
+    private static String nextPlayerMove = "";
     private Text timerText = new Text();
     private Timeline tickTimeline;
-    private static String nextPlayerMove = "";
+    private static Canvas board;
 
     @Override
     public void start(Stage primaryStage) {
@@ -75,6 +74,10 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         endCause = null;
     }
 
+    public static void setGameTime(int newGameTime) {
+        timer = newGameTime;
+    }
+
     /**
      * Returns the size of the board
      * @return an array of ints with the 0th element being the width of the
@@ -87,7 +90,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
     public Scene generateBoard() {
         Pane root = buildGUI();
         new Board(GameGUIManager.getCurrentLevel());
-        timerText = new Text("Current Time: " + TIMER);
+        timerText = new Text("Current Time: " + timer);
         timerText.setStyle(TEXT_STYLE);
         timerText.setTranslateY(50);
         timerText.setTranslateX(200);
@@ -109,15 +112,43 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
      */
     public void tick(){
         tickCount++;
-        timerText.setText("Current Time: " + (TIMER - tickCount));
-        if (TIMER == tickCount) {
+        timerText.setText("Current Time: " + (timer - tickCount));
+        if (timer == tickCount) {
             tickTimeline.stop();
             endGamePopup();
-        } else if (tickCount % Player.getTickCount() == 0) {
+        }
+        ArrayList<Monster> monsters = Board.getActors().getListOfMonsters();
+        for (Monster monster : monsters) {
+            if (tickCount % monster.getTick() == 0) {
+                monster.getNextMovement();
+            }
+        }
+        if (tickCount % Player.getTickCount() == 0) {
             nextPlayerMove();
         }
+        deathCheck();
         if(gameHasEnded) {
             endGame();
+        }
+        drawGame();
+    }
+
+    public void deathCheck() {
+        int[] position = PositionManager.getPlayerPosition();
+        Actor boardActors = Board.getActors();
+        ArrayList<Monster> listOfMonsters = boardActors.getListOfMonsters();
+        for (Monster currentMonster : listOfMonsters) {
+            int[] monsterPosition = PositionManager.getMonsterPosition(currentMonster);
+            if (monsterPosition[0] == position[0] &&
+                    monsterPosition[1] == position[1]) {
+                if (currentMonster instanceof Frog) {
+                    BoardGUI.setGameEnd("Frog");
+                } else if (currentMonster instanceof PinkBall) {
+                    BoardGUI.setGameEnd("Pink Ball");
+                } else if (currentMonster instanceof Bug) {
+                    BoardGUI.setGameEnd("Bug");
+                }
+            }
         }
     }
 
@@ -179,7 +210,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         GameGUIManager.windowChange();
     }
 
-    public void drawGame() {
+    public static void drawGame() {
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.clearRect(0, 0, board.getWidth(), board.getHeight());
         gc.setFill(Color.WHITE);
@@ -198,7 +229,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
                 playerPos[0] * GRID_CELL_WIDTH, playerPos[1] * GRID_CELL_HEIGHT);
     }
 
-    public void drawOtherElements(int[] position, GraphicsContext gc) {
+    public static void drawOtherElements(int[] position, GraphicsContext gc) {
         ArrayList<Monster> listOfMonsters = Board.getActors().
                 getListOfMonsters();
         for(int i = 0; i < Board.getActors().getListOfMonsters().
@@ -242,7 +273,6 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         if(!Objects.equals(nextPlayerMove, "")) {
             movement.playerMovement(nextPlayerMove);
             nextPlayerMove = "";
-            drawGame();
         }
     }
 
@@ -291,6 +321,7 @@ public class BoardGUI extends Application implements EventHandler<ActionEvent> {
         LevelSelector.updateUnlockedLevels(intCurrentLevel);
         GameGUIManager.isLevelSelectorWindowNext = true;
         resetGameEnders();
+        int score = (timer - tickCount) * Player.getPlayerItems().size();
         ((Stage) EXIT_BUTTON.getScene().getWindow()).close();
         GameGUIManager.windowChange();
 

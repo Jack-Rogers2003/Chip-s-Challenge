@@ -1,5 +1,5 @@
 public class PinkBall extends Monster {
-    private static final int TICK = 3;
+    private static final int TICK = 1;
     private static final String IMAGE_FILE = "ball.png";
     private String direction;
 
@@ -11,35 +11,38 @@ public class PinkBall extends Monster {
         return TICK;
     }
 
-    public String getDirection() {
-        return direction;
-    }
-
-    public int[] getNextMovement() {
+    public void getNextMovement() {
         int[] position = PositionManager.getMonsterPosition(this);
+        int[] newPosition = new int[2];
+        newPosition[0] = position[0];
+        newPosition[1] = position[1];
         switch (direction) {
-            case "U":
-                position[1] = position[1] - 1;
-            case "D":
-                position[1] = position[1] + 1;
-            case "L":
-                position[0] = position[0] - 1;
-            case "R":
-                position[0] = position[0] + 1;
+            case "U" -> newPosition[1] = newPosition[1] - 1;
+            case "D" -> newPosition[1] = newPosition[1] + 1;
+            case "L" -> newPosition[0] = newPosition[0] - 1;
+            case "R" -> newPosition[0] = newPosition[0] + 1;
         }
-        return position;
+        if (Movement.outOfBoundsCheck(newPosition) || Movement.monsterOrBlockCheck(newPosition)) {
+            changeDirection();
+        } else {
+            Tile tile = PositionManager.getTileAt(newPosition);
+            if (!(tile instanceof Path || tile instanceof Button || tile instanceof Trap)) {
+                changeDirection();
+            } else {
+                if(tile instanceof Button) {
+                    ((Button) tile).setIsPressed();
+                }
+                PositionManager.setMonsterPosition(this, newPosition);
+            }
+        }
     }
 
-    public void changePosition() {
+    public void changeDirection() {
         switch (direction) {
-            case "U":
-                direction = "D";
-            case "D":
-                direction = "U";
-            case "L":
-                direction = "R";
-            case "R":
-                direction = "L";
+            case "U" -> direction = "D";
+            case "D" -> direction = "U";
+            case "L" -> direction = "R";
+            case "R" -> direction = "L";
         }
     }
 

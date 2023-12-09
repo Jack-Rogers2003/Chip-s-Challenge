@@ -4,13 +4,14 @@ import java.util.Scanner;
 
 /**
  * Class that handles generating the board and connects elements of it
- * @author Jack Rogers, Benji Brew
- * @version 1.1
+ * @author Jack Rogers
+ * @version 1.0
  */
 public class Board {
-    private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
+    private static final String CURRENT_DIRECTORY = System.getProperty(
+            "user.dir");
     private static final String LEVEL_FILE_PATH = CURRENT_DIRECTORY +
-            "\\src\\main\\java\\Levels\\";
+            "\\Levels\\";
     private static final Actor ACTOR = new Actor();
     private final ArrayList<Button> waitingButton = new ArrayList<>();
     private final ArrayList<Trap> waitingTrap = new ArrayList<>();
@@ -19,7 +20,7 @@ public class Board {
     /**
      * Constructor for the board class
      * @param levelFile String input that is the name of the file that contains
-     * the details of the current level
+     *                 the details of the current level
      */
     public Board(String levelFile) {
         try {
@@ -27,6 +28,7 @@ public class Board {
                     + levelFile + ".txt"));
             BoardGUI.setBoardSize(new int[]{Integer.parseInt(fileReader.nextLine()),
                     Integer.parseInt(fileReader.nextLine())});
+            BoardGUI.setGameTime(Integer.parseInt(fileReader.nextLine()));
             int rowTracker = 0;
             Player.resetItems();
             PositionManager.resetPositions();
@@ -49,8 +51,7 @@ public class Board {
     /**
      * Creates a row of the board
      * @param fileRow a line in a file that represents a row of the board and
-     * all objects that are on it
-     * @param nextRow the position of the next row
+     *                all objects that are on it
      */
     private void createRow(String fileRow, int nextRow) {
         String[] rowElements = fileRow.split("_");
@@ -67,9 +68,9 @@ public class Board {
     }
 
     /**
-    * Checks if what is on the square is an actor, item, or monster and calls
-    * the respective method. This is separate from the create createRow method
-    * for readability
+    *Checks if what is on the square is an actor, item, or monster and calls
+    *the respective method. This is separate from the create createRow method
+    *for readability
     * @param actorOrItem String that represents either an actor or Item
     * @param position position of the actor or item to be created
     */
@@ -83,13 +84,9 @@ public class Board {
         }
     }
 
-    /**
-     * Method that creates a block and specifies its position
-     *
-     * @param position the position of the new block
-     */
     public void createBlock(int[] position) {
-        ACTOR.setNewBlock();
+        Block block = new Block();
+        ACTOR.setNewBlock(block);
         PositionManager.setBlockPosition(block, position);
     }
 
@@ -108,7 +105,7 @@ public class Board {
             case "E" -> PositionManager.setNewTile(new Exit(), tilePosition);
             case "I" -> PositionManager.setNewTile(new Ice(tileToCheck[1]), tilePosition);
             case "O" -> PositionManager.setNewTile(new Door(tileToCheck[1]), tilePosition);
-            case "C" -> PositionManager.setNewTile(new ChipSocket(1), tilePosition);
+            case "C" -> PositionManager.setNewTile(new ChipSocket(Integer.parseInt(tileToCheck[1])), tilePosition);
             case "B" -> {
                 Button buttonToAdd = new Button();
                 trapWaitingToAttach(buttonToAdd);
@@ -122,11 +119,6 @@ public class Board {
         }
     }
 
-    /**
-     * Method that checks if a button should be attatched
-     *
-     * @param trapToAttatch the trap for the button to be attatched to
-    */
     public void buttonWaitingToAttach(Trap trapToAttach) {
         if(waitingButton.size() > 0) {
             trapToAttach.setConnectedButton(waitingButton.get(0));
@@ -136,11 +128,6 @@ public class Board {
         }
     }
 
-    /**
-     * Method that checks if a trap should be attatched
-     *
-     * @param buttonToAttatch the button for the trap to be attatched to
-    */
     public void trapWaitingToAttach(Button buttonToAttach) {
         if(waitingTrap.size() > 0) {
             waitingTrap.get(0).setConnectedButton(buttonToAttach);

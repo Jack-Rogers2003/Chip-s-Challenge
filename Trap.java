@@ -1,7 +1,6 @@
 public class Trap extends Tile {
   private boolean isConnected = false;
   private static final boolean CAN_MOVE_ON = true;
-  private boolean isReleased = false;
   private Button connectedButton = new Button();
   private static final String IMAGE_FILE = "Trap.png";
 
@@ -16,12 +15,9 @@ public class Trap extends Tile {
   public Trap() {
   }
 
-  public void releaseTrap() {
-    isReleased = true;
-  }
 
   public boolean getIsReleased() {
-    return isReleased;
+    return connectedButton.getIsPressed();
   }
 
   public boolean getIsConnected() {

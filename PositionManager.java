@@ -1,6 +1,4 @@
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -11,10 +9,10 @@ import java.util.HashMap;
 
 public class PositionManager {
     private static int[] playerPosition;
-    private static HashMap <Object, int[]> monsterPosition = new HashMap<>();
-    private static HashMap <Item, int[]> itemPosition = new HashMap<>();
-    private static HashMap <Block, int[]> blockPosition = new HashMap<>();
-    private static ArrayList<ArrayList<Tile>> tilePosition = new ArrayList<>();
+    private static final HashMap <Object, int[]> MONSTER_POSITION = new HashMap<>();
+    private static final HashMap <Item, int[]> ITEM_POSITION = new HashMap<>();
+    private static final HashMap <Block, int[]> BLOCK_POSITION = new HashMap<>();
+    private static final ArrayList<ArrayList<Tile>> TILE_POSITION = new ArrayList<>();
 
     /**
      * Used for when first generating the game, sets all attributes to empty,
@@ -22,10 +20,10 @@ public class PositionManager {
      * level to another, such as a player's collected items carrying over
      */
     public static void resetPositions() {
-        tilePosition.clear();
-        blockPosition.clear();
-        itemPosition.clear();
-        monsterPosition.clear();
+        TILE_POSITION.clear();
+        BLOCK_POSITION.clear();
+        ITEM_POSITION.clear();
+        MONSTER_POSITION.clear();
     }
 
     /**
@@ -53,7 +51,7 @@ public class PositionManager {
      * of integers of its x and y position
      */
     public static int[] getMonsterPosition(Object monster) {
-        return monsterPosition.get(monster);
+        return MONSTER_POSITION.get(monster);
     }
 
     /**
@@ -61,16 +59,16 @@ public class PositionManager {
      * @param monster The monster that's position is changing
      * @param newPosition The new position of the monster
      */
-    public static void setMonsterPosition(Object monster, int[] newPosition) {
-        monsterPosition.put(monster, newPosition);
+    public static void setMonsterPosition(Monster monster, int[] newPosition) {
+        MONSTER_POSITION.put(monster, newPosition);
     }
 
     public static void setItemPosition(Item newItem, int[] position) {
-        itemPosition.put(newItem, position);
+        ITEM_POSITION.put(newItem, position);
     }
 
     public static HashMap <Item, int[]> getListOfItems() {
-        return itemPosition;
+        return ITEM_POSITION;
     }
 
     /**
@@ -82,7 +80,7 @@ public class PositionManager {
      * @param itemToRemove The item we are removing from the board
      */
     public static void removeItem(Item itemToRemove) {
-        itemPosition.remove(itemToRemove);
+        ITEM_POSITION.remove(itemToRemove);
     }
 
     /**
@@ -91,7 +89,7 @@ public class PositionManager {
     * X and Y coordinate
     */
     public static int[] getBlockPosition(Block blockToFind) {
-        return blockPosition.get(blockToFind);
+        return BLOCK_POSITION.get(blockToFind);
     }
 
     /**
@@ -100,11 +98,15 @@ public class PositionManager {
     * representing its X and Y coordinate 
     */
     public static void setBlockPosition(Block newBlock, int[] newPosition) {
-        blockPosition.put(newBlock, newPosition);
+        BLOCK_POSITION.put(newBlock, newPosition);
     }
 
     public static HashMap<Block, int[]> getBlockPosition() {
-        return blockPosition;
+        return BLOCK_POSITION;
+    }
+
+    public static void removeBlock(Block toRemove) {
+        BLOCK_POSITION.remove(toRemove);
     }
 
     /**
@@ -114,7 +116,7 @@ public class PositionManager {
      * @return a tile object that is the tile at the requested position
      */
     public static Tile getTileAt(int[] position) {
-        return tilePosition.get(position[0]).get(position[1]);
+        return TILE_POSITION.get(position[0]).get(position[1]);
     }
 
     /**
@@ -130,18 +132,14 @@ public class PositionManager {
         if(position[1] == 0) {
             ArrayList<Tile> toAdd = new ArrayList<>();
             toAdd.add(tileCreated);
-            tilePosition.add(toAdd);
+            TILE_POSITION.add(toAdd);
         } else {
-            tilePosition.get(position[0]).add(position[1], tileCreated);
+            TILE_POSITION.get(position[0]).add(position[1], tileCreated);
         }
     }
 
     public static void changeTile(Tile tileToAdd, int[] position) {
-        tilePosition.get(position[0]).set(position[1], tileToAdd);
-    }
-
-    public static ArrayList<ArrayList<Tile>> getTileList() {
-        return tilePosition;
+        TILE_POSITION.get(position[0]).set(position[1], tileToAdd);
     }
 
 }

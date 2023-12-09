@@ -1,10 +1,7 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Movement {
-
+    private boolean blockIsMoving = false;
     public void playerMovement(String nextMove) {
         int[] playerPosition = PositionManager.getPlayerPosition();
         int[] newPosition = new int[2];
@@ -26,33 +23,91 @@ public class Movement {
                 newPosition[1] = playerPosition[1];
             }
         }
-        if(!outOfBoundsCheck(newPosition) && tileCheck(newPosition)) {
+        if(!outOfBoundsCheck(newPosition) &&
+                tileCheck(newPosition) && trapCheck(playerPosition)) {
             if(itemCheck(newPosition)) {
                 getItemForPlayer(newPosition);
             }
-            PositionManager.setPlayerPosition(newPosition);
-            monsterCheck(newPosition);
-        }
-    }
-
-    public void monsterCheck(int[] position) {
-        Actor boardActors = Board.getActors();
-        ArrayList<Monster> listOfMonsters = boardActors.getListOfMonsters();
-        for (Monster currentMonster : listOfMonsters) {
-            int[] monsterPosition = PositionManager.getMonsterPosition(currentMonster);
-            if (monsterPosition[0] == position[0] && monsterPosition[1] == position[1]) {
-                if (currentMonster instanceof Frog) {
-                    BoardGUI.setGameEnd("Frog");
-                } else if (currentMonster instanceof PinkBall) {
-                    BoardGUI.setGameEnd("Pink Ball");
-                } else if (currentMonster instanceof Bug) {
-                    BoardGUI.setGameEnd("Bug");
-                }
+            if(blockCheck(newPosition)) {
+                PositionManager.setPlayerPosition(newPosition);
+                blockDeathCheck();
             }
         }
     }
 
-    public boolean outOfBoundsCheck(int[] currentPosition) {
+    public boolean trapCheck(int[] position) {
+        if(PositionManager.getTileAt(position) instanceof Trap) {
+            return ((Trap) PositionManager.getTileAt(position)).getIsReleased();
+        }
+        return true;
+    }
+
+    public void blockDeathCheck() {
+        int[] playerPosition = PositionManager.getPlayerPosition();
+        Actor blocks = Board.getActors();
+        ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
+        for(Block currentBlock : listOfBlocks) {
+            int[] blockPosition = PositionManager.getBlockPosition(currentBlock);
+            if(blockPosition[0] == playerPosition[0] && blockPosition[1] ==playerPosition[1]) {
+                BoardGUI.setGameEnd("Block");
+            }
+        }
+    }
+
+    public boolean blockCheck(int[] position) {
+        Actor blocks = Board.getActors();
+        ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
+        for(Block currentBlock : listOfBlocks) {
+            int[] newBlockPosition = new int[2];
+            int[] blockPosition = PositionManager.getBlockPosition(currentBlock);
+            newBlockPosition[0] = blockPosition[0];
+            newBlockPosition[1] = blockPosition[1];
+            if(newBlockPosition[0] == position[0] && newBlockPosition[1] == position[1]) {
+                int[] currentPlayerPosition = PositionManager.getPlayerPosition();
+                String direction = getDirection(currentPlayerPosition, position);
+                switch (direction) {
+                    case "U" -> newBlockPosition[1] = newBlockPosition[1] - 1;
+                    case "D" -> newBlockPosition[1] = newBlockPosition[1] + 1;
+                    case "L" -> newBlockPosition[0] = newBlockPosition[0] - 1;
+                    case "R" -> newBlockPosition[0] = newBlockPosition[0] + 1;
+                }
+                if(!outOfBoundsCheck(newBlockPosition)) {
+                    Tile tileToCheck = PositionManager.getTileAt(newBlockPosition);
+                    return blockTileCheck(currentBlock, newBlockPosition, tileToCheck);
+                } else {
+                    System.out.println("Here");
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+    public boolean blockTileCheck(Block block, int[] blockPosition, Tile tileToCheck) {
+        if (tileToCheck instanceof Path) {
+            PositionManager.setBlockPosition(block, blockPosition);
+            return true;
+        } else if (tileToCheck instanceof Button) {
+            ((Button) tileToCheck).setIsPressed();
+            PositionManager.setBlockPosition(block, blockPosition);
+            return true;
+        } else if (tileToCheck instanceof Water) {
+            PositionManager.removeBlock(block);
+            PositionManager.changeTile(new Path(), blockPosition);
+            Board.getActors().removeBlock(block);
+            return true;
+        } else if (tileToCheck instanceof  Ice && !blockIsMoving) {
+            blockIsMoving = true;
+            iceMovement(block, PositionManager.getBlockPosition(block),
+                    blockPosition);
+            return true;
+        }
+        return false;
+    }
+
+
+    public static boolean outOfBoundsCheck(int[] currentPosition) {
         int positionX = currentPosition[0];
         int positionY = currentPosition[1];
         int[] size = BoardGUI.getBoardSize();
@@ -62,6 +117,24 @@ public class Movement {
                 positionX > gridWidth - 1;
     }
 
+    public static boolean monsterOrBlockCheck(int[] positionToCheck) {
+        HashMap<Block, int[]> blockHashMap = PositionManager.getBlockPosition();
+        for(Map.Entry<Block, int[]> entry : blockHashMap.entrySet()) {
+            int[] blockPosition = entry.getValue();
+            if(blockPosition[0] == positionToCheck[0] && blockPosition[1] == positionToCheck[1]) {
+                return true;
+            }
+        }
+        ArrayList<Monster> monsterList = Board.getActors().getListOfMonsters();
+        for (Monster monster : monsterList) {
+            int[] monsterPosition = PositionManager.getMonsterPosition(monster);
+            if (monsterPosition[0] == positionToCheck[0] && monsterPosition[1] == positionToCheck[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean tileCheck(int[] nextPosition) {
         Tile tileToCheck = PositionManager.getTileAt(nextPosition);
         if (tileToCheck instanceof Dirt) {
@@ -69,7 +142,7 @@ public class Movement {
         } else if (tileToCheck instanceof Door) {
             doorCheck((Door) tileToCheck, nextPosition);
         } else if (tileToCheck instanceof Ice) {
-            iceMovement(PositionManager.getPlayerPosition(), nextPosition);
+            iceMovement("P", PositionManager.getPlayerPosition(), nextPosition);
             //Returns false as iceMovement sets the movement itself due to its
             //unique property and need for checking
             return false;
@@ -77,29 +150,84 @@ public class Movement {
             BoardGUI.setGameEnd("Exit");
         } else if (tileToCheck instanceof  Water) {
             BoardGUI.setGameEnd("Water");
+        } else if (tileToCheck instanceof Button) {
+            ((Button) tileToCheck).setIsPressed();
+        } else if (tileToCheck instanceof ChipSocket) {
+            chipSocketCheck((ChipSocket) tileToCheck, nextPosition);
         }
         return PositionManager.getTileAt(nextPosition).getCanMoveOn();
     }
 
-    public void iceMovement(int[] currentPosition, int[] nextPosition) {
+    public boolean isBlockOnTile(int[] tileToCheck) {
+        Actor blocks = Board.getActors();
+        ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
+        for(Block currentBlock : listOfBlocks) {
+            int[] blockPosition = PositionManager.getBlockPosition(
+                    currentBlock);
+            if(blockPosition[0] == tileToCheck[0] &&
+                    blockPosition[1] == tileToCheck[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void iceMovement(Object actorOnIce, int[] currentPosition, int[] nextPosition) {
         Ice iceTile = (Ice) PositionManager.getTileAt(nextPosition);
         String corner = iceTile.getCorner();
-        String direction = getPlayerDirection(currentPosition, nextPosition);
+        String direction = getDirection(currentPosition, nextPosition);
         int[] icePosition = new int[2];
         icePosition[0] = nextPosition[0];
         icePosition[1] = nextPosition[1];
         nextPosition = findNextIceMovement(corner, direction, nextPosition);
+        if(Objects.equals(actorOnIce, "P")) {
+            registerPlayerIceMovement(currentPosition, icePosition, nextPosition);
+        } else if (actorOnIce instanceof Block) {
+            registerBlockIceMovement((Block) actorOnIce, currentPosition, icePosition, nextPosition);
+        }
+    }
+
+    public void registerBlockIceMovement(Block block, int[] currentPosition,
+                                         int[] icePosition, int[] nextPosition) {
+        Tile tile = PositionManager.getTileAt(nextPosition);
         if (outOfBoundsCheck(nextPosition)) {
-            PositionManager.setPlayerPosition(icePosition);
-        } else if (!PositionManager.getTileAt(nextPosition).getCanMoveOn()) {
+            PositionManager.setBlockPosition(block, icePosition);
+            iceMovement(block, icePosition, currentPosition);
+        } else if (!(tile instanceof Path || tile instanceof Button || tile instanceof Trap ||
+                tile instanceof Ice)) {
+            PositionManager.setBlockPosition(block, icePosition);
+            iceMovement(block, icePosition, currentPosition);
+        } else if (tile instanceof Ice) {
+            PositionManager.setBlockPosition(block, icePosition);
+            iceMovement(block, icePosition, nextPosition);
+        } else {
+            blockIsMoving = false;
+            blockTileCheck(block, nextPosition, PositionManager.getTileAt(nextPosition));
+        }
+    }
+
+    public void registerPlayerIceMovement(int[] currentPosition, int[] icePosition, int[] nextPosition) {
+        if (outOfBoundsCheck(nextPosition)) {
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
+            BoardGUI.drawGame();
+            iceMovement("P", icePosition, currentPosition);
+        } else if (!PositionManager.getTileAt(nextPosition).getCanMoveOn() ||
+                isBlockOnTile(nextPosition)) {
+            iceItemCheck(icePosition);
+            PositionManager.setPlayerPosition(icePosition);
+            BoardGUI.drawGame();
+            iceMovement("P", icePosition, currentPosition);
         } else if (PositionManager.getTileAt(nextPosition) instanceof Ice) {
             iceItemCheck(icePosition);
-            iceMovement(icePosition, nextPosition);
-        } else if (tileCheck(nextPosition)){
+            PositionManager.setPlayerPosition(icePosition);
+            BoardGUI.drawGame();
+            iceMovement("P", icePosition, nextPosition);
+        } else if (tileCheck(nextPosition) ){
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(nextPosition);
+            BoardGUI.drawGame();
+            blockCheck(nextPosition);
         }
     }
 
@@ -148,7 +276,7 @@ public class Movement {
         }
     }
 
-    public String getPlayerDirection(int[] currentPosition, int[] nextPosition) {
+    public String getDirection(int[] currentPosition, int[] nextPosition) {
         if(nextPosition[0] - currentPosition[0] == -1) {
             return "L";
         } else if (nextPosition[0] - currentPosition[0] == 1) {
@@ -172,6 +300,19 @@ public class Movement {
                     break;
                 }
             }
+        }
+    }
+
+    public void chipSocketCheck(ChipSocket chipSocket, int[] tilePosition) {
+        ArrayList<Item> itemList = Player.getPlayerItems();
+        int playerChipCount = 0;
+        for (Item item : itemList) {
+            if (item instanceof Chip) {
+                playerChipCount += 1;
+            }
+        }
+        if (playerChipCount >= chipSocket.getNumberOfChips()) {
+            PositionManager.changeTile(new Path(), tilePosition);
         }
     }
 
