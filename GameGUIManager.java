@@ -3,7 +3,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * Where the program is initially ran, handles the GUI and swapping between windows
+ * Class that handles where the program is initially ran, plus the GUI and swapping between windows
+ * @author Jack Rogers, Benji Brew
  */
 public class GameGUIManager extends Application {
     public static boolean isProfileSelectorWindowNext = false;
@@ -28,7 +29,7 @@ public class GameGUIManager extends Application {
     /**
      * Sets what the currently used profile is
      * @param newProfile A string that is the username of the current
-     *                   profile being used
+     * profile being used
      */
     public static void setCurrentProfile(String newProfile) {
         currentProfile = newProfile;
@@ -42,10 +43,19 @@ public class GameGUIManager extends Application {
         return currentProfile;
     }
 
+    /**
+     * Returns what the currently selected level is
+     * @return A String that is the value of the current level being played
+     */
     public static String getCurrentLevel() {
         return currentLevel;
     }
 
+    /**
+     * Sets what level is being played
+     * @param newLevel A string that will be the current level of the
+     * game being played
+     */
     public static void setCurrentLevel(String newLevel) {
         currentLevel = newLevel;
     }
