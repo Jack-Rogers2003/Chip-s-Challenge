@@ -1,3 +1,10 @@
+/**
+ * Class that handles the ice tile containing boolean methods that are used
+ * to determine the environment created for an actor when interacted with
+ * @author Jack Jones, Benji Brew
+ * @version 1.1
+  */
+
 public class Ice extends Tile {
   private static final boolean CAN_MOVE_ON = true;
   private String imageFile = "";
