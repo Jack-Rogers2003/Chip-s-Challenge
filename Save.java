@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,10 @@ public class Save {
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i) instanceof Key) {
                 Key key = (Key) arrayList.get(i);
-                contents = contents + "[K" + key.getColour() + "]";
+                contents = contents + "-K" + key.getColour() + "";
             } else if (arrayList.get(i) instanceof Chip) {
                 Chip chip = (Chip) arrayList.get(i);
-                contents = contents + "[C]";
+                contents = contents + "-C";
             }
         }
         return contents;
@@ -52,33 +53,45 @@ public class Save {
         return contents;
     }
 
-    public String createRow (String fileRow, int nextRow) {
-        String contents = "";
-        String[] rowElements = fileRow.split("_");
-        for(int i = 0; i <= 5; i++) { //BoardGUI.getBoardSize()[0] - 1
-            int[] currentSquarePosition = new int[]{i,nextRow};
-            String[] propertiesOfSquare = rowElements[i].split(";");
-            contents = contents + propertiesOfSquare;
-            if(rowElements[i].length() > 1) {
-                for(int j = 1; j < propertiesOfSquare.length; j++) {
-                    contents = contents + propertiesOfSquare;
-                }
+    public String makeLevel () {
+        String levelMade = "";
+        int[] size = new int[2];
+        size[0] = BoardGUI.getBoardSize()[0];
+        size[1] = BoardGUI.getBoardSize()[1];
+        for (int i = 0; i < size[1]; i++) {
+            Tile tile = PositionManager.getTileAt(size);
+            if (tile instanceof Dirt) {
+                levelMade = levelMade + "D";
+            } else if (tile instanceof Path) {
+                levelMade = levelMade + "P";
+            } else if (tile instanceof Water) {
+                levelMade = levelMade + "A";
+            } else if (tile instanceof Wall) {
+                levelMade = levelMade + "W";
+            } else if (tile instanceof Exit) {
+                levelMade = levelMade + "E";
+            } else if (tile instanceof Ice) {
+                levelMade = levelMade + "I";
+            } else if (tile instanceof Door) {
+                levelMade = levelMade + "O";
+            } else if (tile instanceof ChipSocket) {
+                levelMade = levelMade + "C";
             }
+            levelMade = levelMade + "_";
+            }
+        return levelMade;
         }
-        return contents;
-    }
 
-    public void loadGame (Player player) throws IOException {
-         Scanner saveReader = new Scanner(saveFile);
-         while (saveReader.hasNextLine()) {
-            String data = saveReader.nextLine();
-            System.out.println(data);
-         }
-        saveReader.close();
-
-    }
 
     public String getLevelFile() {
         return levelFile;
+    }
+
+    public File getSaveFile() {
+        return saveFile;
+    }
+
+    public List<Item> getPlayerItems() {
+        return playerItems;
     }
 }
