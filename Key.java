@@ -8,6 +8,12 @@ public class Key extends Item {
     * @version 1.1
     **/
 
+    /**
+    * Constructor for the key class
+    *@param newColour String input that is the initial of the colour we want to allocate
+    * to the key.
+    **/
+
     public Key(String newColour) {
         colour = newColour;
         switch (colour) {
