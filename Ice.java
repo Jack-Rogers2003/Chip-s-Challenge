@@ -10,6 +10,12 @@ public class Ice extends Tile {
   private String imageFile = "";
   private final String corner;
 
+  /**
+   * Constructor that is used to create instances of an ice tile
+   *
+   * @param newCorner A string that is used to decide which type of ice tile
+   * is used
+   */
   public Ice(String newCorner) {
     corner = newCorner;
     switch (corner) {
@@ -21,14 +27,29 @@ public class Ice extends Tile {
     }
   }
 
+  /**
+   * Method that gets the specific corner being used
+   *
+   * @return the corner being used
+   */
   public String getCorner() {
     return corner;
   }
 
+  /**
+   * Method that decides whether an ice tile can be moved on
+   *
+   * @return the boolean value of CAN_MOVE_ON
+   */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
+ /**
+  * Method that retrieves the image file containing the correct ice tile
+  *
+  * @return the image file
+  */
   public String getImageFile() {
     return imageFile;
   }
