@@ -1,5 +1,3 @@
-package com.example.goingtoblowmybrainsout;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
