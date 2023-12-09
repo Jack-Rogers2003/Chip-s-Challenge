@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 /**
  * Class that handles where the program is initially ran, plus the GUI and swapping between windows
  * @author Jack Rogers, Benji Brew
+ * @version 1.1
  */
 public class GameGUIManager extends Application {
     public static boolean isProfileSelectorWindowNext = false;
