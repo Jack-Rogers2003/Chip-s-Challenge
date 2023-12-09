@@ -2,6 +2,12 @@ public class Key extends Item {
     private final String colour;
     private String imageFile = "";
 
+    /**
+    * Class that allocates a colour to a key
+    * @author Jack Rogers
+    * @version 1.1
+    **/
+
     public Key(String newColour) {
         colour = newColour;
         switch (colour) {
