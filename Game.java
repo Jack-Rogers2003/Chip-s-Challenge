@@ -15,12 +15,12 @@ import java.io.FileWriter;
 public class Game {
     private static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
     private static final File LEVELS_FILE_PATH
-            = new File(CURRENT_DIRECTORY + "\\src\\main\\java\\Levels\\");
+            = new File(CURRENT_DIRECTORY + "\\Levels\\");
 
     private static final File PLAYER_PROFILES_FILE_PATH
-            = new File(CURRENT_DIRECTORY + "\\src\\main\\java\\PlayerProfiles\\");
+            = new File(CURRENT_DIRECTORY + "\\PlayerProfiles\\");
     private static final File LEADERBOARDS_FILE_PATH
-            = new File(CURRENT_DIRECTORY + "\\src\\main\\java\\Leaderboards\\");
+            = new File(CURRENT_DIRECTORY + "\\Leaderboards\\");
 
     public Game() {
         if(!LEVELS_FILE_PATH.exists()) {
