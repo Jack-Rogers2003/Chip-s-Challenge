@@ -3,7 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Class that handles generating the board and connects elements of it
+ * Class that handles generating the board and connects elements of it.
+ *
  * @author Jack Rogers
  * @version 1.0
  */
@@ -72,7 +73,7 @@ public class Board {
     *the respective method. This is separate from the create createRow method
     *for readability
     * @param actorOrItem String that represents either an actor or Item
-    * @param position position of the actor or item to be created
+    * @param position int[] of the actor or item to be created
     */
     public void createActorOrItem(String actorOrItem, int[] position) {
         String[] toCheck = actorOrItem.split("");
@@ -92,7 +93,7 @@ public class Board {
 
     /**
      * Creates a new tile for the current square of the board
-     * @param tile tile to be created
+     * @param tile Tile to be created
      */
     private void createTile(String tile, int[] tilePosition) {
         String[] tileToCheck = tile.split("");
@@ -118,7 +119,13 @@ public class Board {
             }
         }
     }
-
+    
+    /**
+    * Auxilliary method used in createTile that allocates an existing button
+    * to a new trap.
+    *
+    * @param trapToAttatch Trap with no button yet allocated
+    */
     public void buttonWaitingToAttach(Trap trapToAttach) {
         if(waitingButton.size() > 0) {
             trapToAttach.setConnectedButton(waitingButton.get(0));
@@ -127,7 +134,13 @@ public class Board {
             waitingTrap.add(trapToAttach);
         }
     }
-
+    
+    /**
+    * Auxilliary method used in createTile that allocates an existing trap
+    * to a new button.
+    *
+    * @param buttonToAttatch Button with no trap yet allocated
+    */
     public void trapWaitingToAttach(Button buttonToAttach) {
         if(waitingTrap.size() > 0) {
             waitingTrap.get(0).setConnectedButton(buttonToAttach);
