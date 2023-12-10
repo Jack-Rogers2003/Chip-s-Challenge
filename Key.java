@@ -1,12 +1,12 @@
+/**
+ * Class that allocates a colour to a key
+ * @author Jack Rogers
+ * @version 1.1
+ */
+
 public class Key extends Item {
     private final String colour;
     private String imageFile = "";
-
-    /**
-    * Class that allocates a colour to a key
-    * @author Jack Rogers
-    * @version 1.1
-    **/
 
     /**
     * Constructor for the key class
@@ -26,6 +26,8 @@ public class Key extends Item {
 
     /**
     * Method that returns the imageFile value
+    *
+    * @return the image file
     **/
 
     public String getImageFile() {
@@ -34,6 +36,8 @@ public class Key extends Item {
 
     /**
     * Method that returns the colour value
+    *
+    * @return the colour value
     **/
 
     public String getColour() {
