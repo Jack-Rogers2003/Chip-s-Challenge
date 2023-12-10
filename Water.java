@@ -1,5 +1,7 @@
 /**
  * This class creates the Water tile
+ * @author Jack Rogers
+ * @version 1.0
  */
 
 public class Water extends Tile {
