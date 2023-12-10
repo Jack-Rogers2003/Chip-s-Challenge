@@ -1,5 +1,7 @@
 /**
  * This class creates the Wall tile
+ *@author Jack Jones
+ *@version 1.0
  */
 
 public class Wall extends Tile {
