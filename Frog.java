@@ -1,74 +1,171 @@
 import java.util.ArrayList;
 
-/**
- * Class that represents the frog monster with methods to track it's movement and position
- * @author Jack Rogers, Benji Brew
- * @version 1.1
- */
-
 public class Frog extends Monster {
-    private static final int TICK = 3;
+    private static final int TICK = 1;
     private static final String IMAGE_FILE = "frog.png";
-    private boolean playerFound;
+    private ArrayList<ArrayList<int[]>> nextMovement = new ArrayList<>();
+    private static boolean playerFound = false;
 
-
-    /**
-     * Method that checks the current tick the game is on
-     *
-     * @return the tick the game is on
-     */
     public int getTick() {
         return TICK;
     }
 
-    /**
-     * Method that checks the next movemnt of a frog
-     */
     public void getNextMovement() {
         int[] frogPosition = PositionManager.getMonsterPosition(this);
+        int[] movement = new int[2];
+        ArrayList<int[]> startingList = new ArrayList<>();
+        startingList.add(frogPosition);
         playerFound = false;
-        search(frogPosition, new ArrayList<>(), new ArrayList<>());
+        //Check tile left
+        movement[0] = frogPosition[0];
+        movement[1] = frogPosition[1] - 1;
+        if (tileCheck(movement)) {
+            search(movement, startingList);
+        }
+        playerFound = false;
+        movement[0] = frogPosition[0] - 1;
+        movement[1] = frogPosition[1];
+        if (tileCheck(movement)) {
+            search(movement, startingList);
+        }
+        playerFound = false;
+        movement[0] = frogPosition[0] + 1;
+        movement[1] = frogPosition[1];
+        if (tileCheck(movement)) {
+            search(movement, startingList);
+        }
+        playerFound = false;
+        movement[0] = frogPosition[0];
+        movement[1] = frogPosition[1] + 1;
+        if (tileCheck(movement)) {
+            search(movement, startingList);
+        }
+        getFinalMove(nextMovement);
+        nextMovement.clear();
+        playerFound = false;
     }
 
-    /**
-     * Method that seraches for a player and specifies the actions that
-     * the frog will perform if a player is or isn't found
-     * 
-     * @param currentPos the position of frog
-     * @param checked a list of checked positions for a player
-     * @param path the path the frog will take
-     */
-    public void search(int[] currentPos, ArrayList<int[]> checked, ArrayList<int[]> path) {
+    public void search(int[] currentPos, ArrayList<int[]> visited) {
+        visited.add(currentPos);
         if(!playerFound) {
-            int[] newPos = new int[2];
-            int[] up = new int[]{currentPos[0], currentPos[1] + 1};
-            if (PositionManager.getTileAt(up) instanceof Path || PositionManager.getTileAt(up) instanceof Button && !Movement.outOfBoundsCheck(up)) {
-                newPos[0] = up[0];
-                newPos[1] = up[1];
-                if (!playerPosCheck(newPos)) {
+            int[] movement = new int[2];
+            //Checking tile above
+            movement[0] = currentPos[0];
+            movement[1] = currentPos[1] - 1;
+            if (tileCheck(movement) && notVisited(movement, visited) && !playerFound) {
+                if(foundPlayer(movement)) {
+                    visited.add(movement);
+                    addToMovement(visited);
+                } else {
+                    search(movement, visited);
+                }
+            }
+            //Checking tile below
+            movement[0] = currentPos[0];
+            movement[1] = currentPos[1] + 1;
+            if (tileCheck(movement) && notVisited(movement, visited) && !playerFound) {
+                if(foundPlayer(movement)) {
+                    visited.add(movement);
+                    addToMovement(visited);
+                } else {
+                    search(movement, visited);
+                }
+            }
+            //Check tile left
+            movement[0] = currentPos[0] - 1;
+            movement[1] = currentPos[1];
+            if (tileCheck(movement) && notVisited(movement, visited) && !playerFound) {
+                if(foundPlayer(movement)) {
+                    visited.add(movement);
+                    addToMovement(visited);
+                } else {
+                    search(movement, visited);
+                }
+            }
+            //Check right tile
+            movement[0] = currentPos[0] + 1;
+            movement[1] = currentPos[1];
+            if (tileCheck(movement) && notVisited(movement, visited) && !playerFound) {
+                if(foundPlayer(movement)) {
+                    visited.add(movement);
+                    addToMovement(visited);
+                } else {
+                    search(movement, visited);
                 }
             }
         }
     }
 
-    /**
-     * Method that checks the position of a player and the frog
-     *
-     * @param position the x and y coordinates of the players position
-     * @return the boolean value of whether the positions of the frog and player
-     * are the same
-     */
-    public boolean playerPosCheck(int[] position) {
-        int[] playerPosition = PositionManager.getPlayerPosition();
-        return playerPosition[0] == position[0] &&
-                playerPosition[1] == position[1];
+    private void addToMovement(ArrayList<int[]> toAdd) {
+        ArrayList<int[]> createdList = new ArrayList<>();
+        for(int i = 0; i < toAdd.size(); i ++) {
+            int x = toAdd.get(i)[0];
+            int y = toAdd.get(i)[1];
+            createdList.add(new int[] {x, y});
+        }
+        nextMovement.add(createdList);
     }
 
-    /**
-     * Method that retrieves the image file of a frog
-     *
-     * @return the image file
-     */
+
+    private void getFinalMove(ArrayList<ArrayList<int[]>> possibleMoves) {
+        int[] nextMove = new int[2];
+        int distance = 10000000;
+        for (int i = 0; i < possibleMoves.size(); i++) {
+            ArrayList<int[]> currentCheck = possibleMoves.get(i);
+            dumbVisited(currentCheck);
+            if(currentCheck.size() < distance) {
+                nextMove[0] = currentCheck.get(1)[0];
+                nextMove[1] = currentCheck.get(1)[1];
+                distance = currentCheck.size();
+            }
+        }
+        PositionManager.setMonsterPosition(this, nextMove);
+    }
+
+    private boolean notVisited(int[] position, ArrayList<int[]> visited) {
+        for(int i = 0; i < visited.size(); i++) {
+            int visitedX = visited.get(i)[0];
+            int visitedY = visited.get(i)[1];
+            if(position[0] == visitedX && position[1] == visitedY) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean foundPlayer(int[] positionToCheck) {
+        int[] playerPosition = PositionManager.getPlayerPosition();
+        if(positionToCheck[0] == playerPosition[0] && positionToCheck[1] == playerPosition[1]) {
+            playerFound = true;
+            return true;
+        }
+        return false;
+    }
+
+    private void dumbVisited(ArrayList<int[]> visited) {
+        for(int i = 0; i < visited.size(); i++) {
+            System.out.println(visited.get(i)[0] + " " + visited.get(i)[1]);
+        }
+        System.out.println("New");
+    }
+    private void printVisisted(ArrayList<ArrayList<int[]>> visited) {
+        for(int i = 0; i < visited.size(); i++) {
+            for(int j = 0; j < visited.get(i).size(); j++) {
+                System.out.println(visited.get(i).get(j)[0] + " " + visited.get(i).get(j)[1]);
+            }
+        }
+        System.out.println("new");
+    }
+
+    private boolean tileCheck(int[] tilePosition) {
+        if(!Movement.outOfBoundsCheck(tilePosition) && !Movement.monsterOrBlockCheck(tilePosition)) {
+            Tile tile = PositionManager.getTileAt(tilePosition);
+            return (tile instanceof Path || tile instanceof Trap);
+        }
+        return false;
+    }
+
+
     public String getImageFile() {
         return IMAGE_FILE;
     }
