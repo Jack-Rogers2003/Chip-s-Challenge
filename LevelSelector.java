@@ -16,7 +16,7 @@ import java.util.Scanner;
 /**
  * Class for the Level selector and anything relating to its window
  * Handles the buttons, pop-ups and any calls needed for the window to function
- * @author Jack Rogers
+ * @author Jack Rogers, Benji Brew
  * @version 1.1
  */
 public class LevelSelector extends Application implements EventHandler<ActionEvent> {
