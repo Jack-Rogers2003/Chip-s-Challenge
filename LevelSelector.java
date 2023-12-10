@@ -16,6 +16,8 @@ import java.util.Scanner;
 /**
  * Class for the Level selector and anything relating to its window
  * Handles the buttons, pop-ups and any calls needed for the window to function
+ * @author Jack Rogers
+ * @version 1.1
  */
 public class LevelSelector extends Application implements EventHandler<ActionEvent> {
 
@@ -49,6 +51,13 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
     public void start(Stage levelSelectWindow) {
 
     }
+
+    /**
+     * Method that checks what levels a player can access
+     *
+     * @param levelCompleted ant int of the number of levels a player
+     * has completed
+    */
 
     public static void updateUnlockedLevels(int levelCompleted) {
         if(levelCompleted != 5) {
@@ -143,6 +152,11 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         }
     }
 
+    /**
+     * Method that deals with the window for the leaderboard
+     *
+     * @param event the current event occuring in the window
+    */
     public void leaderboardOrLevel(ActionEvent event) {
         if(event.getSource() == LEVEL_1 || event.getSource() == LEVEL_2) {
             String levelToLoad = loadLevel(event.getSource());
@@ -154,6 +168,11 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
     }
 
 
+    /**
+     * Method that handles the loading of a level
+     *
+     * @return the specified level 
+    */
     public String loadLevel(Object levelPressed) {
         String level = "";
         if (LEVEL_1.equals(levelPressed)) {
@@ -164,6 +183,9 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         return level;
     }
 
+    /**
+     * Method that enables the next level button for allowed levels
+    */
     public static void buttonEnable() {
         if(unlockedLevels >= 2) {
             LEVEL_2.setDisable(false);
@@ -179,6 +201,9 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         }
     }
 
+    /**
+     * Method that disnables the next level button for levels that haven't been unlocked
+    */
     public void buttonDisable() {
         if(unlockedLevels < 2) {
             LEVEL_2.setDisable(true);
@@ -194,6 +219,11 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         }
     }
 
+    /**
+     * Method that alerts a user of the consequences of deleting a profile
+     *
+     * @return the result of the alertbox
+    */
     public ButtonType checkDelete() {
         Alert alertBox = new Alert(Alert.AlertType.CONFIRMATION);
         alertBox.setTitle("Profile Deletion Confirm");
@@ -203,6 +233,11 @@ public class LevelSelector extends Application implements EventHandler<ActionEve
         return alertBox.getResult();
     }
 
+    /**
+     * Method that retrieves the leaderboard of the game
+     *
+     * @return the leaderboard with the players respective positions
+    */
     public String[] getLeaderBoard(String level) {
         String[] leaderboardPlaces = new String[10];
         try {
