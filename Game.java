@@ -29,9 +29,6 @@ public class Game {
     //path to where saved games are stored
     private static final File SAVED_GAMES_PATH = new File(
             CURRENT_DIRECTORY + "\\saves\\");
-
-    private static final File STATS_PATH = new File(
-            CURRENT_DIRECTORY + "\\stats\\");
     //Max number a player's username will have added to it
     private static final int MAX_PLAYER_NUMBER = 10000;
     //Length of ".txt" of a file
@@ -56,9 +53,6 @@ public class Game {
         }
         if (!SAVED_GAMES_PATH.mkdir()) {
             SAVED_GAMES_PATH.mkdir();
-        }
-        if(!STATS_PATH.mkdir()) {
-            STATS_PATH.mkdir();
         }
     }
 

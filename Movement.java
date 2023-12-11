@@ -89,21 +89,25 @@ public class Movement {
     public boolean blockCheck(int[] position) {
         Actor blocks = Board.getActors();
         ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
-        for(Block currentBlock : listOfBlocks) {
+        for (Block currentBlock : listOfBlocks) {
             int[] newBlockPosition = new int[2];
-            int[] blockPosition = PositionManager.getBlockPosition(currentBlock);
+            int[] blockPosition = PositionManager.getBlockPosition(
+                    currentBlock);
             newBlockPosition[0] = blockPosition[0];
             newBlockPosition[1] = blockPosition[1];
-            if(newBlockPosition[0] == position[0] && newBlockPosition[1] == position[1]) {
-                int[] currentPlayerPosition = PositionManager.getPlayerPosition();
-                String direction = getDirection(currentPlayerPosition, position);
+            if (newBlockPosition[0] == position[0] && newBlockPosition[1] ==
+                    position[1]) {
+                int[] currentPlayerPosition = PositionManager.
+                        getPlayerPosition();
+                String direction = getDirection(currentPlayerPosition,
+                        position);
                 switch (direction) {
                     case "U" -> newBlockPosition[1] = newBlockPosition[1] - 1;
                     case "D" -> newBlockPosition[1] = newBlockPosition[1] + 1;
                     case "L" -> newBlockPosition[0] = newBlockPosition[0] - 1;
                     case "R" -> newBlockPosition[0] = newBlockPosition[0] + 1;
                 }
-                if(!outOfBoundsCheck(newBlockPosition)) {
+                if (!outOfBoundsCheck(newBlockPosition)) {
                     Tile tileToCheck = PositionManager.getTileAt(newBlockPosition);
                     return blockTileCheck(currentBlock, newBlockPosition, tileToCheck);
                 } else {
@@ -245,7 +249,7 @@ public class Movement {
      */
     public void iceMovement(Object actorOnIce, int[] currentPosition,
                             int[] nextPosition) {
-        if(PositionManager.getTileAt(nextPosition) instanceof Ice) {
+        if (PositionManager.getTileAt(nextPosition) instanceof Ice) {
             Ice iceTile = (Ice) PositionManager.getTileAt(nextPosition);
             String corner = iceTile.getCorner();
             String direction = getDirection(currentPosition, nextPosition);
@@ -261,10 +265,11 @@ public class Movement {
                         icePosition, nextPosition);
             }
         } else {
-            if(actorOnIce == "P") {
+            if (actorOnIce == "P") {
                 PositionManager.setPlayerPosition(nextPosition);
             } else {
-                PositionManager.setBlockPosition((Block) actorOnIce, nextPosition);
+                PositionManager.setBlockPosition((Block) actorOnIce,
+                        nextPosition);
             }
         }
     }
@@ -285,8 +290,8 @@ public class Movement {
             PositionManager.setBlockPosition(block, icePosition);
             iceMovement(block, icePosition, currentPosition);
         } else if (!(tile instanceof Path || tile instanceof Button ||
-                tile instanceof Trap ||
-                tile instanceof Ice)) {
+                tile instanceof Trap || tile instanceof Ice ||
+                tile instanceof Water)) {
             PositionManager.setBlockPosition(block, icePosition);
             iceMovement(block, icePosition, currentPosition);
         } else if (tile instanceof Ice) {
@@ -306,7 +311,8 @@ public class Movement {
      * @param icePosition position of the ice tile being moved onto
      * @param nextPosition position being moved onto off the ice tile
      */
-    public void registerPlayerIceMovement(int[] currentPosition, int[] icePosition, int[] nextPosition) {
+    public void registerPlayerIceMovement(int[] currentPosition,
+                                          int[] icePosition, int[] nextPosition) {
         if (outOfBoundsCheck(nextPosition)) {
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
@@ -325,9 +331,10 @@ public class Movement {
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
             iceMovement("P", icePosition, nextPosition);
-        } else if (tileCheck(nextPosition) ){
+        } else if (tileCheck(nextPosition)) {
+            iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(nextPosition);
-            if(itemCheck(nextPosition)) {
+            if (itemCheck(nextPosition)) {
                 getItemForPlayer(nextPosition);
             }
             blockCheck(nextPosition);
@@ -418,15 +425,15 @@ public class Movement {
         ArrayList<Item> itemList = Player.getPlayerItems();
         boolean keepChecking = true;
         int i = 0;
-        while (i < itemList.size() - 1 && keepChecking) {
+        while (i < itemList.size()  && keepChecking) {
             if (itemList.get(i) instanceof Key newKey) {
                 if (Objects.equals(newKey.getColour(),
                         doorToCheck.getColour())) {
                     PositionManager.changeTile(new Path(), nextPosition);
-                    Player.removeItem(itemList.get(i));
                     keepChecking = false;
                 }
             }
+            i++;
         }
     }
 

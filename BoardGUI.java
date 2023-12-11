@@ -106,6 +106,29 @@ public class BoardGUI extends Application implements
     }
 
     /**
+     * Handles all the button presses and corresponding actions for the window
+     * @param event the event which occurred
+     */
+    @Override
+    public void handle(ActionEvent event) {
+        Stage window = ((Stage) EXIT_BUTTON.getScene().getWindow());
+        if (event.getSource() == EXIT_BUTTON) {
+            tickTimeline.stop();
+            tickCount = 0;
+            GameGUIManager.setIsLevelSelectorWindowNext();
+            window.close();
+            GameGUIManager.windowChange();
+        } else if (event.getSource() == SAVE_GAME_BUTTON) {
+            tickTimeline.stop();
+            saveGame();
+            tickCount = 0;
+            GameGUIManager.setIsLevelSelectorWindowNext();
+            window.close();
+            GameGUIManager.windowChange();
+        }
+    }
+
+    /**
      * Gets the current time of the game by subtracting the timer of the game
      * by the current tickCount
      * @return int that is the currentTime of the game
@@ -815,29 +838,6 @@ public class BoardGUI extends Application implements
             return savedItems.substring(0, savedItems.length() - 1);
         } else {
             return "";
-        }
-    }
-
-    /**
-     * Handles all the button presses and corresponding actions for the window
-     * @param event the event which occurred
-     */
-    @Override
-    public void handle(ActionEvent event) {
-        Stage window = ((Stage) EXIT_BUTTON.getScene().getWindow());
-        if (event.getSource() == EXIT_BUTTON) {
-            tickTimeline.stop();
-            tickCount = 0;
-            GameGUIManager.setIsLevelSelectorWindowNext();
-            window.close();
-            GameGUIManager.windowChange();
-        } else if (event.getSource() == SAVE_GAME_BUTTON) {
-            tickTimeline.stop();
-            saveGame();
-            tickCount = 0;
-            GameGUIManager.setIsLevelSelectorWindowNext();
-            window.close();
-            GameGUIManager.windowChange();
         }
     }
 }

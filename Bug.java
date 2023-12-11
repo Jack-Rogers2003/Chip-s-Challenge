@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Bug extends Monster {
 
     //The ticks that the bug move on
-    private static final int TICK = 1;
+    private static final int TICK = 2;
     //Name of the file that contains the bug's image
     private static final String IMAGE_FILE = "bug.png";
     //The side of which the bug moves against

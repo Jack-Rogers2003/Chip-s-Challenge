@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Frog extends Monster {
     //Tick rate of the Frog
-    private static final int TICK = 1;
+    private static final int TICK = 3;
     //name of the file containing the image for the frog
     private static final String IMAGE_FILE = "frog.png";
     //Maximum distance the frog can be, used when checking for the best move
@@ -62,7 +62,9 @@ public class Frog extends Monster {
         if (tileCheck(movement)) {
             search(movement, startingList);
         }
-        getFinalMove(nextMovement);
+        if(nextMovement.size() > 0) {
+            getFinalMove(nextMovement);
+        }
         nextMovement.clear();
         playerFound = false;
     }

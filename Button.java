@@ -6,7 +6,7 @@
  * @version 1.0
  */
 public class Button extends Tile {
-  //
+  //Whether the Button tile can be moved on or not
   private static final boolean CAN_MOVE_ON = true;
   //Boolean whether the button has been pressed or not
   private boolean isPressed = false;

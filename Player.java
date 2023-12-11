@@ -48,14 +48,6 @@ public class Player {
     }
 
     /**
-     * Removes an item in the player's inventory
-     * @param itemToRemove item to be removed
-     */
-    public static void removeItem(Item itemToRemove) {
-        PLAYER_ITEMS.remove(itemToRemove);
-    }
-
-    /**
      * Resets the player's inventory, done to prevent transfer of items
      * between levels
      */

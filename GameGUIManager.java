@@ -45,15 +45,24 @@ public class GameGUIManager extends Application {
         currentProfile = newProfile;
     }
 
+    /**
+     * Sets the flag for if the profile window is next from true to false
+     */
     public static void setIsProfileSelectorWindowNext() {
         isProfileSelectorWindowNext = !isProfileSelectorWindowNext;
     }
 
-
+    /**
+     * Sets the flag for if the level selector window is next from true to
+     * false
+     */
     public static void setIsLevelSelectorWindowNext() {
         isLevelSelectorWindowNext = !isLevelSelectorWindowNext;
     }
 
+    /**
+     * Sets the flag for if the board window is next from true to false
+     */
     public static void setIsBoardWindowNext() {
         isBoardWindowNext = !isBoardWindowNext;
     }
@@ -66,10 +75,18 @@ public class GameGUIManager extends Application {
         return currentProfile;
     }
 
+    /**
+     * Returns the current level the game is being played on
+     * @return current game level
+     */
     public static String getCurrentLevel() {
         return currentLevel;
     }
 
+    /**
+     * Sets the level that is being currently played on
+     * @param newLevel current level
+     */
     public static void setCurrentLevel(String newLevel) {
         currentLevel = newLevel;
     }
