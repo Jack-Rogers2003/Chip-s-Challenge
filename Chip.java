@@ -1,17 +1,16 @@
+/**
+ * Class that handles the Chip item, and it's needed properties
+ * @author Jack Rogers
+ * @version 1.0
+ */
 public class Chip extends Item {
-
-    /**
-    * Class that creates a chip item
-    * @author Jack Rogers
-    * @version 1.1
-    **/
-
+    //Name of the file containing the image of the chip
     private static final String IMAGE_FILE = "chip.png";
 
-    /** 
-    Method that returns the value of the image
-    **/
-
+    /**
+     * Returns the name of the image file for the chip
+     * @return String that is the name of the file
+     */
     public String getImageFile() {
         return IMAGE_FILE;
     }

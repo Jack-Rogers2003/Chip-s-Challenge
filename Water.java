@@ -1,9 +1,14 @@
 /**
- * This class creates the Water tile
+ * This class creates the Water tile and handles any related properties
+ * and operations
+ * @author Jack Jones
+ * @author Dan Cross
  */
 
 public class Water extends Tile {
+  //Whether the tile can be moved on or not
   private static final boolean CAN_MOVE_ON = true;
+  //Name of the file containing the image of the Water tile
   private static final String IMAGE_FILE = "water.png";
 
   /**

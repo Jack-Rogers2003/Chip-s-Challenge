@@ -1,16 +1,17 @@
 /**
- * A class representing a block-type actor. This class is a subclass of Actor
- *
+ * A block object and any needed properties for it to operate in the game
+ * @author Jack Rogers
  * @version 1.0
  */
 public class Block {
+    //The name of the file with the png of the block
     private static final String IMAGE_FILE = "block.png";
-    
+
     /**
-    * A method to retrieve the private attribute IMAGE_FIlE
-    *
-    * @returns IMAGE_FILE
-    */
+     * Returns a String that is the file of the block's png
+     * @return block png name
+     */
+
     public String getImageFile() {
         return IMAGE_FILE;
     }

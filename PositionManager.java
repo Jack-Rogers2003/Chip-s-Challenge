@@ -4,15 +4,24 @@ import java.util.HashMap;
 /**
  * Class that is used to track the positions of objects on the board
  * @author Jack Rogers
- * @version 1.0
+ * @version 1.4
  */
 
 public class PositionManager {
+    //Position of the Player
     private static int[] playerPosition;
-    private static final HashMap <Object, int[]> MONSTER_POSITION = new HashMap<>();
-    private static final HashMap <Item, int[]> ITEM_POSITION = new HashMap<>();
-    private static final HashMap <Block, int[]> BLOCK_POSITION = new HashMap<>();
-    private static final ArrayList<ArrayList<Tile>> TILE_POSITION = new ArrayList<>();
+    //Hashmap of all Monster on the board and they Positions
+    private static final HashMap<Monster, int[]> MONSTER_POSITION =
+            new HashMap<>();
+    //HashMap of Items on the board and their positions
+    private static final HashMap<Item, int[]> ITEM_POSITION = new HashMap<>();
+    //Hashmap of all blocks on the board and their positions
+    private static final HashMap<Block, int[]> BLOCK_POSITION =
+            new HashMap<>();
+    //ArrayList containing an ArrayList of Tiles on the board, the tiles are
+    //in the position representing their position on the board
+    private static final ArrayList<ArrayList<Tile>> TILE_POSITION =
+            new ArrayList<>();
 
     /**
      * Used for when first generating the game, sets all attributes to empty,
@@ -37,8 +46,7 @@ public class PositionManager {
 
     /**
      * Sets the new location of the player on the board
-     *      * as a pair of it's x and y position
-     * @param newPlayerPosition the new x coordinate of the player
+     * @param newPlayerPosition the new position of the player
      */
     public static void setPlayerPosition(int[] newPlayerPosition) {
         playerPosition = newPlayerPosition;
@@ -47,8 +55,7 @@ public class PositionManager {
     /**
      * Returns the position of a monster
      * @param monster the monster we are looking for the position of
-     * @return The position of a monster as a Pair
-     * of integers of its x and y position
+     * @return The position of a monster
      */
     public static int[] getMonsterPosition(Object monster) {
         return MONSTER_POSITION.get(monster);
@@ -63,11 +70,20 @@ public class PositionManager {
         MONSTER_POSITION.put(monster, newPosition);
     }
 
+    /**
+     * Sets the position of an item
+     * @param newItem item being set position of
+     * @param position position of item
+     */
     public static void setItemPosition(Item newItem, int[] position) {
         ITEM_POSITION.put(newItem, position);
     }
 
-    public static HashMap <Item, int[]> getListOfItems() {
+    /**
+     * Returns a Hashmap of the items on the board
+     * @return hashmap of items
+     */
+    public static HashMap<Item, int[]> getListOfItems() {
         return ITEM_POSITION;
     }
 
@@ -84,35 +100,42 @@ public class PositionManager {
     }
 
     /**
-    * Returns the current position of the block on the board
-    * @return the position of block as an Array of Integers containing its
-    * X and Y coordinate
-    */
+     * Gets the position of a block
+     * @param blockToFind block to get the position of
+     * @return position of blockToFind
+     */
     public static int[] getBlockPosition(Block blockToFind) {
         return BLOCK_POSITION.get(blockToFind);
     }
 
     /**
-    * Sets the new position of the block after it has been moved
-    * @param newPosition the new position of the block as an Array of Integers
-    * representing its X and Y coordinate 
-    */
+     * Sets the new position of a block
+     * @param newBlock block having position changed
+     * @param newPosition new position of block
+     */
     public static void setBlockPosition(Block newBlock, int[] newPosition) {
         BLOCK_POSITION.put(newBlock, newPosition);
     }
 
+    /**
+     * Returns a hashMap that is contains the blocks on the board
+     * @return hashmap of blocks
+     */
     public static HashMap<Block, int[]> getBlockPosition() {
         return BLOCK_POSITION;
     }
 
+    /**
+     * Removes a block from the board
+     * @param toRemove block to remove
+     */
     public static void removeBlock(Block toRemove) {
         BLOCK_POSITION.remove(toRemove);
     }
 
     /**
      * Returns the tile contained at a given position
-     * @param position an array of ints with the x and y position that
-     *                 is being searched
+     * @param position position of Tile
      * @return a tile object that is the tile at the requested position
      */
     public static Tile getTileAt(int[] position) {
@@ -125,11 +148,10 @@ public class PositionManager {
      * adds, this is to work around that the arraylist needs to be
      * initialised with a tile object already inside
      * @param tileCreated the Tile object that is to be created
-     * @param position an array of ints containing the x and y coordinate of
-     *                 the tile
+     * @param position The positon of the created tile
      */
     public static void setNewTile(Tile tileCreated, int[] position) {
-        if(position[1] == 0) {
+        if (position[1] == 0) {
             ArrayList<Tile> toAdd = new ArrayList<>();
             toAdd.add(tileCreated);
             TILE_POSITION.add(toAdd);
@@ -138,6 +160,11 @@ public class PositionManager {
         }
     }
 
+    /**
+     * Changes what a tile is at a position
+     * @param tileToAdd tile that is replacing another tile
+     * @param position position of tile being replaced
+     */
     public static void changeTile(Tile tileToAdd, int[] position) {
         TILE_POSITION.get(position[0]).set(position[1], tileToAdd);
     }

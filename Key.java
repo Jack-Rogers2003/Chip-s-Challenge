@@ -1,19 +1,17 @@
 /**
- * Class that allocates a colour to a key
- * @author Jack Rogers
- * @version 1.1
+ * class that handles the key item and it's properties and operations
  */
-
 public class Key extends Item {
+    //Colour of the key
     private final String colour;
+    //Name of the file with the image of the key
     private String imageFile = "";
 
     /**
-    * Constructor for the key class
-    *@param newColour String input that is the initial of the colour we want to allocate
-    * to the key.
-    **/
-
+     * Constructor for key, set's colour and then sets imageFile
+     * correspondingly
+     * @param newColour Colour of the key
+     */
     public Key(String newColour) {
         colour = newColour;
         switch (colour) {
@@ -25,21 +23,17 @@ public class Key extends Item {
     }
 
     /**
-    * Method that returns the imageFile value
-    *
-    * @return the image file
-    **/
-
+     * Returns name of the file with the image of the key
+     * @return file name
+     */
     public String getImageFile() {
         return imageFile;
     }
 
     /**
-    * Method that returns the colour value
-    *
-    * @return the colour value
-    **/
-
+     * Returns the colour of the key
+     * @return key colour
+     */
     public String getColour() {
         return colour;
     }

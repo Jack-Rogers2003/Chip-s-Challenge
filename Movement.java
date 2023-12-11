@@ -1,7 +1,21 @@
 import java.util.*;
 
+/**
+ * Class that handles the movement for the Player and Block, as well as checks
+ * for if a movement is valid
+ * @author Jack Rogers
+ * @version 1.5
+ */
 public class Movement {
+    //Flag for if a block is moving or not
     private boolean blockIsMoving = false;
+
+    /**
+     * Performs the next movement of a player, it checks if the move is valid
+     * before updating the player's position
+     * @param nextMove the next move of the player based off their keyboard
+     *                 input
+     */
     public void playerMovement(String nextMove) {
         int[] playerPosition = PositionManager.getPlayerPosition();
         int[] newPosition = new int[2];
@@ -23,37 +37,55 @@ public class Movement {
                 newPosition[1] = playerPosition[1];
             }
         }
-        if(!outOfBoundsCheck(newPosition) &&
+        if (!outOfBoundsCheck(newPosition) &&
                 tileCheck(newPosition) && trapCheck(playerPosition)) {
-            if(itemCheck(newPosition)) {
+            if (itemCheck(newPosition)) {
                 getItemForPlayer(newPosition);
             }
-            if(blockCheck(newPosition)) {
+            if (blockCheck(newPosition)) {
                 PositionManager.setPlayerPosition(newPosition);
                 blockDeathCheck();
             }
         }
     }
 
+    /**
+     * Checks if a trap at a position is released or not
+     * @param position position being checked
+     * @return whether the trap is released or not
+     */
     public boolean trapCheck(int[] position) {
-        if(PositionManager.getTileAt(position) instanceof Trap) {
-            return ((Trap) PositionManager.getTileAt(position)).getIsReleased();
+        if (PositionManager.getTileAt(position) instanceof Trap) {
+            return ((Trap) PositionManager.getTileAt(position)).
+                    getIsReleased();
         }
         return true;
     }
 
+    /**
+     * Check whether the block is on the same tile as the player, and if so,
+     * calls for the game to end
+     */
     public void blockDeathCheck() {
         int[] playerPosition = PositionManager.getPlayerPosition();
         Actor blocks = Board.getActors();
         ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
-        for(Block currentBlock : listOfBlocks) {
-            int[] blockPosition = PositionManager.getBlockPosition(currentBlock);
-            if(blockPosition[0] == playerPosition[0] && blockPosition[1] ==playerPosition[1]) {
+        for (Block currentBlock : listOfBlocks) {
+            int[] blockPosition = PositionManager.getBlockPosition(
+                    currentBlock);
+            if (blockPosition[0] == playerPosition[0] && blockPosition[1] ==
+                    playerPosition[1]) {
                 BoardGUI.setGameEnd("Block");
             }
         }
     }
 
+    /**
+     * Checks whether the movement of the block is a valid one, finds the
+     * block being moved, then checks if the movement being done is a valid one
+     * @param position the position being checked
+     * @return if the movement is valid
+     */
     public boolean blockCheck(int[] position) {
         Actor blocks = Board.getActors();
         ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
@@ -75,7 +107,6 @@ public class Movement {
                     Tile tileToCheck = PositionManager.getTileAt(newBlockPosition);
                     return blockTileCheck(currentBlock, newBlockPosition, tileToCheck);
                 } else {
-                    System.out.println("Here");
                     return false;
                 }
 
@@ -84,7 +115,16 @@ public class Movement {
         return true;
     }
 
-    public boolean blockTileCheck(Block block, int[] blockPosition, Tile tileToCheck) {
+    /**
+     * Check if the tile the block is being moved onto is one it is allowed to
+     * be moved onto
+     * @param block block being moved
+     * @param blockPosition position of the block
+     * @param tileToCheck tile being checked
+     * @return if the movement is valid
+     */
+    public boolean blockTileCheck(Block block, int[] blockPosition,
+                                  Tile tileToCheck) {
         if (tileToCheck instanceof Path) {
             PositionManager.setBlockPosition(block, blockPosition);
             return true;
@@ -106,7 +146,11 @@ public class Movement {
         return false;
     }
 
-
+    /**
+     * Check if a movement takes an actor out of bounds
+     * @param currentPosition position being checked
+     * @return if the position is out of bounds
+     */
     public static boolean outOfBoundsCheck(int[] currentPosition) {
         int positionX = currentPosition[0];
         int positionY = currentPosition[1];
@@ -117,24 +161,39 @@ public class Movement {
                 positionX > gridWidth - 1;
     }
 
+    /**
+     * Check if a monster or block is on the tile being checked
+     * @param positionToCheck position being checked
+     * @return if a monster or block is on the position
+     */
     public static boolean monsterOrBlockCheck(int[] positionToCheck) {
-        HashMap<Block, int[]> blockHashMap = PositionManager.getBlockPosition();
-        for(Map.Entry<Block, int[]> entry : blockHashMap.entrySet()) {
+        HashMap<Block, int[]> blockHashMap = PositionManager.
+                getBlockPosition();
+        for (Map.Entry<Block, int[]> entry : blockHashMap.entrySet()) {
             int[] blockPosition = entry.getValue();
-            if(blockPosition[0] == positionToCheck[0] && blockPosition[1] == positionToCheck[1]) {
+            if (blockPosition[0] == positionToCheck[0] && blockPosition[1] ==
+                    positionToCheck[1]) {
                 return true;
             }
         }
         ArrayList<Monster> monsterList = Board.getActors().getListOfMonsters();
         for (Monster monster : monsterList) {
-            int[] monsterPosition = PositionManager.getMonsterPosition(monster);
-            if (monsterPosition[0] == positionToCheck[0] && monsterPosition[1] == positionToCheck[1]) {
+            int[] monsterPosition = PositionManager.getMonsterPosition(
+                    monster);
+            if (monsterPosition[0] == positionToCheck[0] &&
+                    monsterPosition[1] == positionToCheck[1]) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Check for tile whether a player can move onto a tile and any
+     * interactions for when a player moves
+     * @param nextPosition where player is moving to
+     * @return if a move onto a tile is valid
+     */
     public boolean tileCheck(int[] nextPosition) {
         Tile tileToCheck = PositionManager.getTileAt(nextPosition);
         if (tileToCheck instanceof Dirt) {
@@ -142,7 +201,8 @@ public class Movement {
         } else if (tileToCheck instanceof Door) {
             doorCheck((Door) tileToCheck, nextPosition);
         } else if (tileToCheck instanceof Ice) {
-            iceMovement("P", PositionManager.getPlayerPosition(), nextPosition);
+            iceMovement("P", PositionManager.getPlayerPosition(),
+                    nextPosition);
             //Returns false as iceMovement sets the movement itself due to its
             //unique property and need for checking
             return false;
@@ -158,13 +218,18 @@ public class Movement {
         return PositionManager.getTileAt(nextPosition).getCanMoveOn();
     }
 
+    /**
+     * Check if a block is on a tile
+     * @param tileToCheck tile being checked
+     * @return whether a block is on it
+     */
     public boolean isBlockOnTile(int[] tileToCheck) {
         Actor blocks = Board.getActors();
         ArrayList<Block> listOfBlocks = blocks.getListOfBlocks();
-        for(Block currentBlock : listOfBlocks) {
+        for (Block currentBlock : listOfBlocks) {
             int[] blockPosition = PositionManager.getBlockPosition(
                     currentBlock);
-            if(blockPosition[0] == tileToCheck[0] &&
+            if (blockPosition[0] == tileToCheck[0] &&
                     blockPosition[1] == tileToCheck[1]) {
                 return true;
             }
@@ -172,28 +237,55 @@ public class Movement {
         return false;
     }
 
-    public void iceMovement(Object actorOnIce, int[] currentPosition, int[] nextPosition) {
-        Ice iceTile = (Ice) PositionManager.getTileAt(nextPosition);
-        String corner = iceTile.getCorner();
-        String direction = getDirection(currentPosition, nextPosition);
-        int[] icePosition = new int[2];
-        icePosition[0] = nextPosition[0];
-        icePosition[1] = nextPosition[1];
-        nextPosition = findNextIceMovement(corner, direction, nextPosition);
-        if(Objects.equals(actorOnIce, "P")) {
-            registerPlayerIceMovement(currentPosition, icePosition, nextPosition);
-        } else if (actorOnIce instanceof Block) {
-            registerBlockIceMovement((Block) actorOnIce, currentPosition, icePosition, nextPosition);
+    /**
+     * Handles moving an actor along ice
+     * @param actorOnIce Player or Block on the ice
+     * @param currentPosition current position of the actor
+     * @param nextPosition position actor is being to
+     */
+    public void iceMovement(Object actorOnIce, int[] currentPosition,
+                            int[] nextPosition) {
+        if(PositionManager.getTileAt(nextPosition) instanceof Ice) {
+            Ice iceTile = (Ice) PositionManager.getTileAt(nextPosition);
+            String corner = iceTile.getCorner();
+            String direction = getDirection(currentPosition, nextPosition);
+            int[] icePosition = new int[2];
+            icePosition[0] = nextPosition[0];
+            icePosition[1] = nextPosition[1];
+            nextPosition = findNextIceMovement(corner, direction, nextPosition);
+            if (Objects.equals(actorOnIce, "P")) {
+                registerPlayerIceMovement(currentPosition, icePosition,
+                        nextPosition);
+            } else if (actorOnIce instanceof Block) {
+                registerBlockIceMovement((Block) actorOnIce, currentPosition,
+                        icePosition, nextPosition);
+            }
+        } else {
+            if(actorOnIce == "P") {
+                PositionManager.setPlayerPosition(nextPosition);
+            } else {
+                PositionManager.setBlockPosition((Block) actorOnIce, nextPosition);
+            }
         }
     }
 
+    /**
+     * Registers a block's movement over ice, and any further ice movement or
+     * interactions that may take place
+     * @param block Block moving over ice
+     * @param currentPosition current position
+     * @param icePosition position of the ice tile
+     * @param nextPosition next position to move to
+     */
     public void registerBlockIceMovement(Block block, int[] currentPosition,
-                                         int[] icePosition, int[] nextPosition) {
+                                         int[] icePosition,
+                                         int[] nextPosition) {
         Tile tile = PositionManager.getTileAt(nextPosition);
         if (outOfBoundsCheck(nextPosition)) {
             PositionManager.setBlockPosition(block, icePosition);
             iceMovement(block, icePosition, currentPosition);
-        } else if (!(tile instanceof Path || tile instanceof Button || tile instanceof Trap ||
+        } else if (!(tile instanceof Path || tile instanceof Button ||
+                tile instanceof Trap ||
                 tile instanceof Ice)) {
             PositionManager.setBlockPosition(block, icePosition);
             iceMovement(block, icePosition, currentPosition);
@@ -202,35 +294,54 @@ public class Movement {
             iceMovement(block, icePosition, nextPosition);
         } else {
             blockIsMoving = false;
-            blockTileCheck(block, nextPosition, PositionManager.getTileAt(nextPosition));
+            blockTileCheck(block, nextPosition, PositionManager.
+                    getTileAt(nextPosition));
         }
     }
 
+    /**
+     * Perform a Player's movement onto ice, and any further movement or
+     * interactions that may take place
+     * @param currentPosition Current position of the Player
+     * @param icePosition position of the ice tile being moved onto
+     * @param nextPosition position being moved onto off the ice tile
+     */
     public void registerPlayerIceMovement(int[] currentPosition, int[] icePosition, int[] nextPosition) {
         if (outOfBoundsCheck(nextPosition)) {
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
-            BoardGUI.drawGame();
             iceMovement("P", icePosition, currentPosition);
         } else if (!PositionManager.getTileAt(nextPosition).getCanMoveOn() ||
                 isBlockOnTile(nextPosition)) {
-            iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
-            BoardGUI.drawGame();
-            iceMovement("P", icePosition, currentPosition);
+            if (blockCheck(nextPosition)) {
+                PositionManager.setPlayerPosition(nextPosition);
+            } else {
+                iceItemCheck(icePosition);
+                PositionManager.setPlayerPosition(icePosition);
+                iceMovement("P", icePosition, currentPosition);
+            }
         } else if (PositionManager.getTileAt(nextPosition) instanceof Ice) {
             iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(icePosition);
-            BoardGUI.drawGame();
             iceMovement("P", icePosition, nextPosition);
         } else if (tileCheck(nextPosition) ){
-            iceItemCheck(icePosition);
             PositionManager.setPlayerPosition(nextPosition);
-            BoardGUI.drawGame();
+            if(itemCheck(nextPosition)) {
+                getItemForPlayer(nextPosition);
+            }
             blockCheck(nextPosition);
         }
     }
 
+    /**
+     * Finds the next ice movement depending on the direction an actor is
+     * travelling in
+     * @param corner corner of the ice tile
+     * @param direction direction of the actor
+     * @param nextPosition position from being on the ice tile
+     * @return the position after moving over the ice tile
+     */
     public int[] findNextIceMovement(String corner, String direction,
                                     int[] nextPosition) {
         switch (corner) {
@@ -270,14 +381,24 @@ public class Movement {
         return nextPosition;
     }
 
+    /**
+     * Check if an item is on the ice tile being moved over
+     * @param icePosition position of the ice tile
+     */
     public void iceItemCheck(int[] icePosition) {
-        if(itemCheck(icePosition)) {
+        if (itemCheck(icePosition)) {
             getItemForPlayer(icePosition);
         }
     }
 
+    /**
+     * Gets the direction the actor is moving in
+     * @param currentPosition current position of the actor
+     * @param nextPosition position acting is moving to
+     * @return direction the actor is travelling in
+     */
     public String getDirection(int[] currentPosition, int[] nextPosition) {
-        if(nextPosition[0] - currentPosition[0] == -1) {
+        if (nextPosition[0] - currentPosition[0] == -1) {
             return "L";
         } else if (nextPosition[0] - currentPosition[0] == 1) {
             return "R";
@@ -288,21 +409,32 @@ public class Movement {
         }
     }
 
+    /**
+     * Checks if the player has an item to unlock a door
+     * @param doorToCheck Door being checked
+     * @param nextPosition Position of the door
+     */
     public void doorCheck(Door doorToCheck, int[] nextPosition) {
         ArrayList<Item> itemList = Player.getPlayerItems();
-        for (Item item : itemList) {
-            if (item instanceof Key newKey) {
-                if (Objects.equals(newKey.getColour(), doorToCheck.getColour())) {
+        boolean keepChecking = true;
+        int i = 0;
+        while (i < itemList.size() - 1 && keepChecking) {
+            if (itemList.get(i) instanceof Key newKey) {
+                if (Objects.equals(newKey.getColour(),
+                        doorToCheck.getColour())) {
                     PositionManager.changeTile(new Path(), nextPosition);
-                    Player.removeItem(item);
-                    //As we've already found and used the item, no need to
-                    //continue the for loop
-                    break;
+                    Player.removeItem(itemList.get(i));
+                    keepChecking = false;
                 }
             }
         }
     }
 
+    /**
+     * Checks if the player has enough chips to open a chipSocket
+     * @param chipSocket chipSocket being checked
+     * @param tilePosition Position of the chipSocket
+     */
     public void chipSocketCheck(ChipSocket chipSocket, int[] tilePosition) {
         ArrayList<Item> itemList = Player.getPlayerItems();
         int playerChipCount = 0;
@@ -316,22 +448,33 @@ public class Movement {
         }
     }
 
+    /**
+     * Check if an item is on the tile being moved onto by the player
+     * @param positionToCheck position being checked
+     * @return whether an item is on the tile or not
+     */
     public boolean itemCheck(int[] positionToCheck) {
         HashMap<Item, int[]> itemList = PositionManager.getListOfItems();
         for (Map.Entry<Item, int[]> entry : itemList.entrySet()) {
             int[] itemPosition = entry.getValue();
-            if(itemPosition[0] == positionToCheck[0] && itemPosition[1] == positionToCheck[1]) {
+            if (itemPosition[0] == positionToCheck[0] && itemPosition[1] ==
+                    positionToCheck[1]) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Adds the item at the tile position to the Player's inventory
+     * @param itemToGetPosition position with item on it
+     */
     public void getItemForPlayer(int[] itemToGetPosition) {
         HashMap<Item, int[]> itemList = PositionManager.getListOfItems();
         for (Map.Entry<Item, int[]> entry : itemList.entrySet()) {
             int[] itemPosition = entry.getValue();
-            if(itemPosition[0] == itemToGetPosition[0] && itemPosition[1] == itemToGetPosition[1]) {
+            if (itemPosition[0] == itemToGetPosition[0] && itemPosition[1] ==
+                    itemToGetPosition[1]) {
                 Player.addPlayerItems(entry.getKey());
                 PositionManager.removeItem(entry.getKey());
                 break;

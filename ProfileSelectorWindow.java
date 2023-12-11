@@ -70,7 +70,7 @@ public class ProfileSelectorWindow extends Application implements EventHandler<A
             String selectedName = nameSelectionPopUp(GAME.getAllPlayerNames());
             if(GAME.getAllPlayerNames().contains(selectedName)) {
                 GameGUIManager.setCurrentProfile(selectedName);
-                GameGUIManager.isLevelSelectorWindowNext = true;
+                GameGUIManager.setIsLevelSelectorWindowNext();
                 window.close();
                 GameGUIManager.windowChange();
             }

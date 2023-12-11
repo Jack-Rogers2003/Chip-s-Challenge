@@ -1,20 +1,21 @@
 /**
- * Class that handles the ice tile containing boolean methods that are used
- * to determine the environment created for an actor when interacted with
- * @author Jack Jones, Benji Brew
+ * Class that handles the Ice tile and its related properties and operations
+ * @author Jack Jones
+ * @author Dan Cross
  * @version 1.1
-  */
-
+ */
 public class Ice extends Tile {
+  //Whether the ice tile can be moved on by the player
   private static final boolean CAN_MOVE_ON = true;
+  //The name of the file containing the image of the ice tile
   private String imageFile = "";
+  //Corner for the ice tile
   private final String corner;
 
   /**
-   * Constructor that is used to create instances of an ice tile
-   *
-   * @param newCorner A string that is used to decide which type of ice tile
-   * is used
+   * Constructor for Ice, sets what the corner is and then sets the imageFile
+   * corresponding to it
+   * @param newCorner corner of the tile
    */
   public Ice(String newCorner) {
     corner = newCorner;
@@ -28,28 +29,25 @@ public class Ice extends Tile {
   }
 
   /**
-   * Method that gets the specific corner being used
-   *
-   * @return the corner being used
+   * Returns the corner of the ice tile
+   * @return ice tile corner
    */
   public String getCorner() {
     return corner;
   }
 
   /**
-   * Method that decides whether an ice tile can be moved on
-   *
-   * @return the boolean value of CAN_MOVE_ON
+   * Returns whether the ice tile can be moved on or not
+   * @return is the player can move on it
    */
   public boolean getCanMoveOn() {
     return CAN_MOVE_ON;
   }
 
- /**
-  * Method that retrieves the image file containing the correct ice tile
-  *
-  * @return the image file
-  */
+  /**
+   * Returns the name of the file that contains the image of the ice tile
+   * @return file name
+   */
   public String getImageFile() {
     return imageFile;
   }

@@ -3,17 +3,26 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * Class that handles where the program is initially ran, plus the GUI and swapping between windows
- * @author Jack Rogers, Benji Brew
- * @version 1.1
+ * Where the program is initially ran, handles the GUI and swapping
+ * between windows
+ * @author Jack Rogers
+ * @version 1.3
  */
 public class GameGUIManager extends Application {
-    public static boolean isProfileSelectorWindowNext = false;
-    public static boolean isLevelSelectorWindowNext = false;
-    public static boolean isBoardWindowNext = false;
-    private static final ProfileSelectorWindow PROFILE_SELECTOR_WINDOW = new ProfileSelectorWindow();
+    //Flag if profile Selection window is the next to be opened
+    private static boolean isProfileSelectorWindowNext = false;
+    ////Flag if the level selector window is the next to be opened
+    private static boolean isLevelSelectorWindowNext = false;
+    //Flag if the board window is the next to be opened
+    private static boolean isBoardWindowNext = false;
+    //Instance of the profile selection window
+    private static final ProfileSelectorWindow PROFILE_SELECTOR_WINDOW =
+            new ProfileSelectorWindow();
+    //Window that will be used to display in
     private static final Stage WINDOW = new Stage();
+    //Current selected profile
     private static String currentProfile = "";
+    //Current selected level
     private static String currentLevel = "";
 
     /**
@@ -30,10 +39,23 @@ public class GameGUIManager extends Application {
     /**
      * Sets what the currently used profile is
      * @param newProfile A string that is the username of the current
-     * profile being used
+     *                   profile being used
      */
     public static void setCurrentProfile(String newProfile) {
         currentProfile = newProfile;
+    }
+
+    public static void setIsProfileSelectorWindowNext() {
+        isProfileSelectorWindowNext = !isProfileSelectorWindowNext;
+    }
+
+
+    public static void setIsLevelSelectorWindowNext() {
+        isLevelSelectorWindowNext = !isLevelSelectorWindowNext;
+    }
+
+    public static void setIsBoardWindowNext() {
+        isBoardWindowNext = !isBoardWindowNext;
     }
 
     /**
@@ -44,19 +66,10 @@ public class GameGUIManager extends Application {
         return currentProfile;
     }
 
-    /**
-     * Returns what the currently selected level is
-     * @return A String that is the value of the current level being played
-     */
     public static String getCurrentLevel() {
         return currentLevel;
     }
 
-    /**
-     * Sets what level is being played
-     * @param newLevel A string that will be the current level of the
-     * game being played
-     */
     public static void setCurrentLevel(String newLevel) {
         currentLevel = newLevel;
     }
