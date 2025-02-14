@@ -1,5 +1,1 @@
-READ ME
-First make sure that JavaFX is successfully installed and usable on your IDE
-To run the game, load source into an ide, and then run GameGUIManager. Once this is done, change the vm options to:
-"--module-path "libarypath" --add-modules javafx.controls,javafx.fxml"
-With "libarypath" being the path to your javaFX libary. Once this is done run GameGuiManager again, and enjoy!
+A java based remake of the game Chip's Challenge, including multiple levels and user account systems, as well as a leaderboard across these accounts
